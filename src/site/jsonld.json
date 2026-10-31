@@ -1,0 +1,37 @@
+{
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://pravahax.com/#organization",
+            "name": "PRAVAHAx Systems Engineering",
+            "legalName": "PRAVAHAx Systems Engineering",
+            "url": "https://pravahax.com",
+            "logo": "https://pravahax.com/logo.svg",
+            "email": "hello@pravahax.com",
+            "telephone": "+91-94048-02076",
+            "slogan": "Thinking is Technology.",
+            "sameAs": ["https://www.linkedin.com/company/pravahax", "https://x.com/pravahax", "https://www.instagram.com/pravahax"]
+          },
+          {
+            "@type": ["LocalBusiness", "ProfessionalService"],
+            "@id": "https://pravahax.com/#business",
+            "name": "PRAVAHAx Systems Engineering",
+            "legalName": "PRAVAHAx Systems Engineering",
+            "url": "https://pravahax.com",
+            "image": "https://pravahax.com/logo.svg",
+            "email": "hello@pravahax.com",
+            "telephone": "+91-94048-02076",
+            "parentOrganization": { "@id": "https://pravahax.com/#organization" },
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "B-604 Kasliwal Marvel West, Satara, Beed By Pass",
+              "addressLocality": "Chhatrapati Sambhajinagar",
+              "addressRegion": "Maharashtra",
+              "postalCode": "431001",
+              "addressCountry": "IN"
+            },
+            "openingHours": "Mo-Sa 10:00-19:00"
+          }
+        ]
+      }
