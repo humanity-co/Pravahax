@@ -19,7 +19,7 @@
             <a href="#/industries" data-route="industries">Industries</a>
             <a href="#/work" data-route="work">Work</a>
             <div class="x-navitem" id="abtItem">
-              <a href="#/about" data-route="about" aria-expanded="false" aria-controls="abtMega">About us <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+              <a href="#/about" data-route="about impact life" aria-expanded="false" aria-controls="abtMega">About us <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
               <div class="x-mega x-mega--sm" id="abtMega">
                 <ul id="abtList"></ul>
               </div>
@@ -47,21 +47,23 @@
         <button class="x-menu__search" type="button" id="menuSearch" aria-haspopup="dialog" aria-controls="pal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>Search services, industries, roles…</button>
         <nav aria-label="Mobile">
           <div class="x-acc">
-            <button type="button" aria-expanded="false" aria-controls="accWhat" data-route="services consulting">What we do <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button type="button" aria-expanded="false" aria-controls="accWhat" data-route="services">Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
             <div class="x-acc__panel" id="accWhat" hidden>
-              <a class="x-menu__sub" href="#/services">Services</a>
+              <a class="x-menu__sub" href="#/services">All services</a>
               <div id="accSvc" style="display:contents"></div>
-              <a class="x-menu__sub" href="#/consulting">Consulting</a>
             </div>
           </div>
+          <a href="#/consulting" data-route="consulting">Consulting</a>
           <a href="#/industries" data-route="industries">Industries</a>
           <a href="#/work" data-route="work">Work</a>
+          <a href="#/labs" data-route="labs">Labs</a>
           <div class="x-acc">
-            <button type="button" aria-expanded="false" aria-controls="accAbt" data-route="about">About us <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button type="button" aria-expanded="false" aria-controls="accAbt" data-route="about impact life">About us <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
             <div class="x-acc__panel" id="accAbt" hidden>
               <a class="x-menu__sub" href="#/about">Our story</a>
-              <a class="x-menu__sub" href="#/about/beliefs">Our beliefs</a>
               <a class="x-menu__sub" href="#/about/leadership">Leadership</a>
+              <a class="x-menu__sub" href="#/careers/life">Life at PRAVAHAx</a>
+              <a class="x-menu__sub x-menu__sub--ico" href="#/impact" id="accImpact">Teach as we build</a>
             </div>
           </div>
           <div class="x-acc">
@@ -69,12 +71,18 @@
             <div class="x-acc__panel" id="accCar" hidden>
               <a class="x-menu__sub" href="#/careers">Careers</a>
               <a class="x-menu__sub" href="#/careers/internships">Internships</a>
-              <a class="x-menu__sub" href="#/careers/life">Life at PRAVAHAx</a>
+              <a class="x-menu__sub" href="#/careers/ipt">In-Plant Training (IPT)</a>
             </div>
           </div>
         </nav>
+        <ul class="x-mchips" aria-label="Get in touch">
+          <li><a href="mailto:hello@pravahax.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>hello@pravahax.com</a></li>
+          <li><a href="tel:+919404802076"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>+91 94048 02076</a></li>
+          <li><a href="https://wa.me/919404802076?text=Hi%20PRAVAHAx%2C%20I%20came%20across%20your%20website%20and%20would%20like%20to%20connect." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12.5a7.5 7.5 0 0 1-11 6.6L4 20.5l1.4-4.6A7.5 7.5 0 1 1 20 12.5z"/></svg>WhatsApp</a></li>
+        </ul>
         <div class="x-btns"><a class="x-btn x-btn--primary" href="#/contact">Contact</a></div>
       </div>
+      <div class="x-mscrim" id="menuScrim" aria-hidden="true"></div>
 
       <div class="x-pal" id="pal" hidden>
         <div class="x-pal__scrim" data-close></div>
@@ -93,30 +101,24 @@
 
       <main id="main" tabindex="-1">
         <div id="view-home">
-          <section class="x-hero x-hero--home" aria-labelledby="heroTitle">
-            <img class="x-hero__img" src="hero-home2.webp" alt="Developer writing code on a laptop and monitor" width="1280" height="720" fetchpriority="high" decoding="async" />
-            <div class="x-hero__body">
-              <div class="x-wrap" style="width:100%">
-                <div class="x-hero__copy">
-                  <p class="x-eyebrow">PRAVAHAx Systems Engineering</p>
-                  <p class="x-pron x-mono" lang="sa-Latn">pra·vā·ha (n.)</p>
-                  <h1 class="x-h1" id="heroTitle">Less chaos. <span class="x-ul">More flow.</span></h1>
-                  <p class="x-lead">Custom software, AI and IoT, built end to end. Yours to own.</p>
-                  <div class="x-btns">
-                    <a class="x-btn x-btn--primary" href="#/contact?need=not-sure">Book a free brainstorm</a>
-                    <a class="x-btn x-btn--ghost" href="#/work">See our work</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="x-wrap" style="width:100%">
-              <ul class="x-promises" aria-label="Our commitments">
-                <li><b class="x-promfig">1 business day</b><span>Reply to every enquiry</span></li>
-                <li><b class="x-promfig">14</b><span>working days to a demo you can click</span></li>
-                <li><b class="x-promfig">100%</b><span>Your code, your IP, your cloud</span></li>
+          <section class="x-hx xk" aria-labelledby="xkT">
+            <div class="x-wrap"><div class="xk__in">
+              <p class="xk__eb x-m">PRAVAHAx Systems Engineering</p>
+              <h1 id="xkT" aria-label="Less chaos. More flow.">
+                <span aria-hidden="true"><span class="xk__l" style="--i:0;--dx:3px;--dy:-2px;--r:-4deg;--w:700;--o:1">L</span><span class="xk__l" style="--i:1;--dx:-2px;--dy:4px;--r:5deg;--w:400;--o:.6">e</span><span class="xk__l" style="--i:2;--dx:1px;--dy:-3px;--r:-2deg;--w:700;--o:1">s</span><span class="xk__l" style="--i:3;--dx:-4px;--dy:2px;--r:6deg;--w:400;--o:1">s</span> <span class="xk__chaos"><span class="xk__l" style="--i:4;--dx:2px;--dy:5px;--r:-6deg;--w:700;--o:.6">c</span><span class="xk__l" style="--i:5;--dx:-3px;--dy:-1px;--r:3deg;--w:400;--o:1">h</span><span class="xk__l" style="--i:6;--dx:5px;--dy:2px;--r:-3deg;--w:700;--o:1">a</span><span class="xk__l" style="--i:7;--dx:-1px;--dy:-4px;--r:4deg;--w:400;--o:.6">o</span><span class="xk__l" style="--i:8;--dx:4px;--dy:3px;--r:-5deg;--w:700;--o:1">s</span></span><span class="xk__l" style="--i:9;--dx:-2px;--dy:-5px;--r:2deg;--w:400;--o:.6">.</span></span>
+                <span class="xk__sky" aria-hidden="true"><span class="xk__fl">More flow.<svg class="xk__ul" viewBox="0 0 400 16" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 10C58 6 104 5 160 7.5S262 11.5 318 8.5S376 5 396 6.5"/></svg></span></span>
+              </h1>
+              <p class="xk__sub">Custom software, AI and IoT, built end to end. Yours to own.</p>
+              <div class="x-btns"><a class="x-btn xk__cta" href="#/contact?need=not-sure">Book a free brainstorm</a><a class="x-hx__tl" href="#/work">See our work <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+              <ul class="xk__rail" aria-label="Our commitments">
+                <li>Reply in 1 business day</li>
+                <li>Demo in 14 working days</li>
+                <li>100% your code and IP</li>
               </ul>
-            </div>
+              <p class="xk__def">pravāha · <span class="x-deva" lang="sa">प्रवाह</span> · n. a steady, continuous flow.</p>
+            </div></div>
           </section>
+          
 
           <section class="x-sec" id="services" aria-labelledby="svcTitle">
             <div class="x-wrap">
@@ -183,6 +185,16 @@
             </div>
           </section>
 
+          <section class="x-sec" style="padding-block:0 clamp(48px,6vw,72px)" aria-label="Beyond client work">
+            <div class="x-wrap">
+              <div class="x-quiet x-rv">
+                <p class="x-eyebrow">Beyond client work</p>
+                <p class="x-quiet__t">We teach coding and electronics in village schools.</p>
+                <a class="x-arrow" href="#/impact">See Teach as we build <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </section>
+
           <section class="x-sec x-dark x-ctaband" aria-labelledby="ctaTitle">
             <div class="x-wrap">
               <div class="x-cta">
@@ -204,9 +216,9 @@
         <!-- Leadership team, rendered on the About page (#/about/leadership). Hidden here; images load only when About renders. -->
         <div id="teamStore" hidden aria-hidden="true">
               <ul class="x-team">
-                <li class="x-person" data-p="devang"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Devang Patil" aria-describedby="pnote-devang"><div class="x-media"><img data-k="team-devang.webp" src="team-devang.webp" alt="Devang Patil" width="406" height="507" loading="lazy" decoding="async" /></div><div class="x-pnote" data-nid="pnote-devang"><p class="x-pnote__role">Chief Executive Officer (CEO)</p><p class="x-pnote__name">Devang Patil</p><p class="x-pnote__desc">Leads the company's vision, strategy and growth. Builds the leadership team and owns key client partnerships.</p><p class="x-pnote__sign" aria-hidden="true">— Devang</p></div></div><h3>Devang Patil</h3><p>Chief Executive Officer (CEO)</p><a class="x-mail" href="mailto:devang@pravahax.com">devang@pravahax.com</a></li>
-                <li class="x-person" data-p="dhruv"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Dhruv Naik" aria-describedby="pnote-dhruv"><div class="x-media"><img data-k="team-dhruv.webp" src="team-dhruv.webp" alt="Dhruv Naik" width="295" height="369" loading="lazy" decoding="async" /></div><div class="x-pnote x-pnote--mint" data-nid="pnote-dhruv"><p class="x-pnote__role">Chief Technology Officer</p><p class="x-pnote__name">Dhruv Naik</p><p class="x-pnote__desc">Owns our technology stack and engineering standards. Turns architecture into production-grade software, AI and IoT systems.</p><p class="x-pnote__sign" aria-hidden="true">— Dhruv</p></div></div><h3>Dhruv Naik</h3><p>Chief Technology Officer</p><a class="x-mail" href="mailto:dhruv@pravahax.com">dhruv@pravahax.com</a></li>
+                <li class="x-person" data-p="devang"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Devang Patil" aria-describedby="pnote-devang"><div class="x-media"><img data-k="team-devang.webp" src="team-devang.webp" alt="Devang Patil" width="406" height="507" loading="lazy" decoding="async" /></div><div class="x-pnote" data-nid="pnote-devang"><p class="x-pnote__role">Chief Executive Officer</p><p class="x-pnote__name">Devang Patil</p><p class="x-pnote__desc">Leads the company's vision, strategy and growth. Builds the leadership team and owns key client partnerships.</p><p class="x-pnote__sign" aria-hidden="true">— Devang</p></div></div><h3>Devang Patil</h3><p>Chief Executive Officer</p><a class="x-mail" href="mailto:devang@pravahax.com">devang@pravahax.com</a></li>
                 <li class="x-person" data-p="chetan"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Chetan Agrawal" aria-describedby="pnote-chetan"><div class="x-media"><img data-k="team-chetan.webp" src="team-chetan.webp" alt="Chetan Agrawal" width="373" height="466" loading="lazy" decoding="async" /></div><div class="x-pnote x-pnote--sky" data-nid="pnote-chetan"><p class="x-pnote__role">Head of Operations</p><p class="x-pnote__name">Chetan Agrawal</p><p class="x-pnote__desc">Keeps projects, people and delivery moving on time. Runs timelines, resourcing and client coordination across every engagement.</p><p class="x-pnote__sign" aria-hidden="true">— Chetan</p></div></div><h3>Chetan Agrawal</h3><p>Head of Operations</p><a class="x-mail" href="mailto:chetan@pravahax.com">chetan@pravahax.com</a></li>
+                <li class="x-person" data-p="dhruv"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Dhruv Naik" aria-describedby="pnote-dhruv"><div class="x-media"><img data-k="team-dhruv.webp" src="team-dhruv.webp" alt="Dhruv Naik" width="295" height="369" loading="lazy" decoding="async" /></div><div class="x-pnote x-pnote--mint" data-nid="pnote-dhruv"><p class="x-pnote__role">Chief Technology Officer</p><p class="x-pnote__name">Dhruv Naik</p><p class="x-pnote__desc">Owns our technology stack and engineering standards. Turns architecture into production-grade software, AI and IoT systems.</p><p class="x-pnote__sign" aria-hidden="true">— Dhruv</p></div></div><h3>Dhruv Naik</h3><p>Chief Technology Officer</p><a class="x-mail" href="mailto:dhruv@pravahax.com">dhruv@pravahax.com</a></li>
                 <li class="x-person" data-p="masoom"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Masoom Mishra" aria-describedby="pnote-masoom"><div class="x-media"><img data-k="team-masoom.jpg" src="team-masoom.jpg" alt="Masoom Mishra" width="600" height="600" loading="lazy" decoding="async" /></div><div class="x-pnote x-pnote--sky" data-nid="pnote-masoom"><p class="x-pnote__role">Head of Research &amp; Development</p><p class="x-pnote__name">Masoom Mishra</p><p class="x-pnote__desc">Leads research into new capabilities. Heads our planned move into bioinformatics and life sciences.</p><p class="x-pnote__sign" aria-hidden="true">— Masoom</p></div></div><h3>Masoom Mishra</h3><p>Head of Research &amp; Development</p><a class="x-mail" href="mailto:masoom@pravahax.com">masoom@pravahax.com</a></li>
                 <li class="x-person" data-p="varad"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Varad Deshpande" aria-describedby="pnote-varad"><div class="x-media"><img data-k="team-varad.webp" src="team-varad.webp" alt="Varad Deshpande" width="458" height="572" loading="lazy" decoding="async" /></div><div class="x-pnote" data-nid="pnote-varad"><p class="x-pnote__role">Engineering Lead</p><p class="x-pnote__name">Varad Deshpande</p><p class="x-pnote__desc">Leads the engineering team day to day. Plans sprints, reviews code and mentors engineers from first commit to release.</p><p class="x-pnote__sign" aria-hidden="true">— Varad</p></div></div><h3>Varad Deshpande</h3><p>Engineering Lead</p><a class="x-mail" href="mailto:varad@pravahax.com">varad@pravahax.com</a></li>
                 <li class="x-person" data-p="pallav"><div class="x-ptrig" tabindex="0" role="button" aria-expanded="false" aria-label="About Pallav Wankhede" aria-describedby="pnote-pallav"><div class="x-media"><img data-k="team-pallav.webp" src="team-pallav.webp" alt="Pallav Wankhede" width="352" height="440" loading="lazy" decoding="async" /></div><div class="x-pnote x-pnote--mint" data-nid="pnote-pallav"><p class="x-pnote__role">Head of Information Systems &amp; DevOps</p><p class="x-pnote__name">Pallav Wankhede</p><p class="x-pnote__desc">Runs our infrastructure, cloud and deployment pipelines. Keeps systems secure, monitored and reliable for every client.</p><p class="x-pnote__sign" aria-hidden="true">— Pallav</p></div></div><h3>Pallav Wankhede</h3><p>Head of Information Systems &amp; DevOps</p><a class="x-mail" href="mailto:pallav@pravahax.com">pallav@pravahax.com</a></li>
@@ -241,7 +253,7 @@
           <div class="x-foot__grid">
             <div class="x-foot__brand">
               <a class="x-logo" href="#/" aria-label="PRAVAHAx home"><svg viewBox="0 0 594 292" aria-hidden="true" focusable="false"><use href="#logo"/></svg><span>PRAVAHA<b>x</b></span></a>
-              <p class="x-foot__legal">PRAVAHAx Systems Engineering · Chhatrapati Sambhajinagar, India</p>
+              <p class="x-foot__legal">Chhatrapati Sambhajinagar, India</p>
               <p class="x-foot__tag" style="margin-top:8px;color:#fff;font-weight:600">Thinking is Technology.</p>
             </div>
             <div>
@@ -256,9 +268,9 @@
             <div>
               <h2>Company</h2>
               <ul>
-                <li><a href="#/about">About</a></li>
+                <li><a href="#/about">Our story</a></li>
+                <li><a href="#/about/leadership">Leadership</a></li>
                 <li><a href="#/careers">Careers</a></li>
-                <li><a href="#/careers/life">Life at PRAVAHAx</a></li>
                 <li><a href="#/contact">Contact</a></li>
               </ul>
             </div>
@@ -268,28 +280,33 @@
                 <li><a href="mailto:hello@pravahax.com">hello@pravahax.com</a></li>
                 <li><a href="tel:+919404802076">+91 94048 02076</a></li>
               </ul>
-              <ul class="x-foot__social" aria-label="PRAVAHAx on social media">
-                <li><a href="https://www.linkedin.com/company/pravahax" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V17M8 7.2v.01M12 17v-6.5M12 13.5a2.5 2.5 0 0 1 5 0V17"/></svg></a></li>
-                <li><a href="https://x.com/pravahax" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 4h4L19.5 20h-4z"/><path d="M19 4l-6.2 7M5 20l6.2-7"/></svg></a></li>
-                <li><a href="https://www.instagram.com/pravahax" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7v.01"/></svg></a></li>
-              </ul>
             </div>
           </div>
           <div class="x-foot__bar">
             <p>© 2026 PRAVAHAx Systems Engineering</p>
             <nav aria-label="Legal">
               <a href="#/privacy">Privacy</a>
-              <a href="#/terms">Terms and conditions</a>
-              <a href="#/cookies">Cookies</a>
-              <a href="#/accessibility">Accessibility</a>
+              <a href="#/terms">Terms</a>
               <a href="#/sitemap">Sitemap</a>
             </nav>
+              <ul class="x-foot__social" aria-label="PRAVAHAx on social media">
+                <li><a href="https://www.linkedin.com/company/pravahax" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V17M8 7.2v.01M12 17v-6.5M12 13.5a2.5 2.5 0 0 1 5 0V17"/></svg></a></li>
+                <li><a href="https://x.com/pravahax" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 4h4L19.5 20h-4z"/><path d="M19 4l-6.2 7M5 20l6.2-7"/></svg></a></li>
+                <li><a href="https://www.instagram.com/pravahax" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7v.01"/></svg></a></li>
+              </ul>
           </div>
         </div>
       </footer>
 
-      <a class="x-btn x-btn--primary x-fab" href="#/contact">Talk to us</a>
+      <a class="x-btn x-btn--primary x-fab" href="#/contact" aria-label="Talk to us"><svg class="x-fab__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12.5a7.5 7.5 0 0 1-11 6.6L4 20.5l1.4-4.6A7.5 7.5 0 1 1 20 12.5z"/></svg><span class="x-fab__t">Talk to us</span></a>
       <a class="x-wa" href="https://wa.me/919404802076?text=Hi%20PRAVAHAx%2C%20I%20came%20across%20your%20website%20and%20would%20like%20to%20connect." target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg><span class="x-wa__tip" aria-hidden="true">Chat on WhatsApp</span></a>
+      <nav class="x-dock" aria-label="Quick navigation">
+        <a href="#/" data-route=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>
+        <a href="#/services" data-route="services consulting"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>What we do</span></a>
+        <a href="#/work" data-route="work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></svg><span>Work</span></a>
+        <a href="#/about" data-route="about impact life"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg><span>About</span></a>
+        <button type="button" class="x-dock__talk" id="dockTalk" aria-haspopup="dialog" aria-controls="cm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12.5a7.5 7.5 0 0 1-11 6.6L4 20.5l1.4-4.6A7.5 7.5 0 1 1 20 12.5z"/></svg><span>Talk</span></button>
+      </nav>
 
       <div class="x-cm" id="cm" hidden>
         <div class="x-cm__scrim" data-cm-close></div>
@@ -301,6 +318,27 @@
           <p class="x-cm__lead" id="cmLead">Tell us what you need. We reply within 1 business day.</p>
           <div class="x-cm__body" id="cmBody"></div>
           <p class="x-cm__alt"><a href="mailto:hello@pravahax.com">hello@pravahax.com</a><a href="tel:+919404802076">+91 94048 02076</a></p>
+        </div>
+      </div>
+
+      <!-- Leader sheet (≤1024px): opened from the leadership roster; the contact sheet's look. -->
+      <div class="x-cm x-ls" id="ls" hidden>
+        <div class="x-cm__scrim" data-ls-close></div>
+        <div class="x-cm__card" role="dialog" aria-modal="true" aria-labelledby="lsName" aria-describedby="lsRole" tabindex="-1">
+          <div class="x-cm__grab" aria-hidden="true"></div>
+          <button class="x-cm__x" type="button" aria-label="Close" data-ls-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          <figure class="x-ls__img"><img id="lsImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" /></figure>
+          <p class="x-ls__idx" id="lsIdx" aria-hidden="true"></p>
+          <h2 class="x-ls__name" id="lsName"></h2>
+          <p class="x-ls__role" id="lsRole"></p>
+          <blockquote class="x-ls__note" id="lsNote"><p id="lsDesc"></p><p class="x-ls__sign" id="lsSign" aria-hidden="true"></p></blockquote>
+          <div class="x-ls__foot">
+            <button class="x-ls__nav" type="button" id="lsPrev" aria-label="Previous leader"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <a class="x-btn x-btn--primary x-ls__mail" id="lsMail" href="mailto:hello@pravahax.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><span></span></a>
+            <button class="x-ls__nav" type="button" id="lsNext" aria-label="Next leader"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+          <p class="x-ls__addr" id="lsAddr"></p>
+          <p class="x-vh" id="lsLive" aria-live="polite" aria-atomic="true"></p>
         </div>
       </div>
     </div>

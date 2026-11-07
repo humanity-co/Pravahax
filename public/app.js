@@ -1,4 +1,30 @@
 (function () {
+              var sec = document.querySelector(".xk"), home = document.getElementById("view-home"), t = 0, shown = false;
+              if (!sec || !home) return;
+              var rm = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : null;
+              function play() {
+                clearTimeout(t);
+                sec.classList.remove("is-go", "is-done");
+                if (rm && rm.matches) { sec.classList.add("is-go", "is-done"); return; }
+                void sec.offsetWidth;
+                requestAnimationFrame(function () {
+                  requestAnimationFrame(function () {
+                    sec.classList.add("is-go");
+                    t = setTimeout(function () { sec.classList.add("is-done"); }, 1400);
+                  });
+                });
+              }
+              function check() {
+                var on = !home.hidden;
+                if (on && !shown) play();
+                if (!on) { clearTimeout(t); sec.classList.remove("is-go", "is-done"); }
+                shown = on;
+              }
+              addEventListener("hashchange", function () { setTimeout(check, 0); });
+              if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { setTimeout(check, 0); }); else setTimeout(check, 0);
+            })();
+;
+(function () {
   "use strict";
   // PRAVAHAx icon set: 24px grid, 1.5 stroke, one solid blue accent per glyph.
   var AC = 'style="fill:var(--icon-ac)" stroke="none"';
@@ -154,15 +180,15 @@
       quote: "The technical precision of their work translated directly into serious enterprise leads.", by: "Gopal Kale", role: "Managing Director, Sujal Industries" }
   ];
   var TEAM = [
-    { name: "Devang Patil", role: "Chief Executive Officer (CEO)" },
-    { name: "Dhruv Naik", role: "Chief Technology Officer" },
+    { name: "Devang Patil", role: "Chief Executive Officer" },
     { name: "Chetan Agrawal", role: "Head of Operations" },
+    { name: "Dhruv Naik", role: "Chief Technology Officer" },
     { name: "Masoom Mishra", role: "Head of Research & Development" },
     { name: "Varad Deshpande", role: "Engineering Lead" },
     { name: "Pallav Wankhede", role: "Head of Information Systems & DevOps" }
   ];
   var PAGES = { services: "Services", industries: "Industries", consulting: "Consulting", work: "Work", about: "About", careers: "Careers", contact: "Contact", privacy: "Privacy", terms: "Terms and conditions", cookies: "Cookies", accessibility: "Accessibility", sitemap: "Sitemap" };
-  window.PX = { SERVICES: SERVICES, INDUSTRIES: INDUSTRIES, CASES: CASES, TEAM: TEAM, PAGES: PAGES };
+  window.PX = { SERVICES: SERVICES, INDUSTRIES: INDUSTRIES, CASES: CASES, TEAM: TEAM, PAGES: PAGES, I: I };
 
   var $ = function (s) { return document.getElementById(s); };
   var esc = function (t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;"); };
@@ -247,13 +273,14 @@
   I.cake = '<path d="M4 20h16v-7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 15c2 1.5 4 1.5 5.3 0 1.3 1.5 4 1.5 5.4 0 1.3 1.5 3.3 1.5 5.3 0M12 11V7.5"/>' + dot(12, 4.8, 1.3);
   I.leaf = '<path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15"/><path d="M5 19 13 11"/>' + dot(15.5, 8.5, 1.2);
   I.gift = '<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20"/><path d="M12 8.5C10.5 5 7 4.5 7 6.6 7 8 9.5 8.5 12 8.5zM12 8.5c1.5-3.5 5-4 5-1.9 0 1.4-2.5 1.9-5 1.9z"/>' + dot(16, 16, 1.2);
-  $("carList").innerHTML = [["#/careers", "users", "Careers", "Open roles, how we hire and how to apply."], ["#/careers/internships", "school", "Internships", "Six months, a mentor and a real project."], ["#/careers/life", "leaf", "Life at PRAVAHAx", "Rooms, rituals, treks and the fine print."]].map(function (c) {
+  $("carList").innerHTML = [["#/careers", "users", "Careers", "Open roles, how we hire and how to apply."], ["#/careers/internships", "school", "Internships", "3 to 6 months, with a mentor and a real project."], ["#/careers/ipt", "education", "In-Plant Training (IPT)", "4–6 months for final-year students. Students and colleges register."]].map(function (c) {
     return '<li><a href="' + c[0] + '"><span class="x-ico">' + svg(c[1]) + '</span><span><strong>' + c[2] + '</strong><span class="x-d">' + c[3] + "</span></span></a></li>";
   }).join("");
 
-  $("abtList").innerHTML = [["#/about", "flow", "Our story", "Why we started PRAVAHAx, and our name."], ["#/about/beliefs", "star", "Our beliefs", "Five things we hold to on every project."], ["#/about/leadership", "users", "Leadership", "The executives who guide PRAVAHAx."]].map(function (c) {
+  $("abtList").innerHTML = [["#/about", "flow", "Our story", "Why we started PRAVAHAx, and our name."], ["#/about/leadership", "users", "Leadership", "The executives who guide PRAVAHAx."], ["#/careers/life", "leaf", "Life at PRAVAHAx", "Rooms, rituals, treks and the fine print."], ["#/impact", "book", "Teach as we build", "Coding, electronics and books in village schools."]].map(function (c) {
     return '<li><a href="' + c[0] + '"><span class="x-ico">' + svg(c[1]) + '</span><span><strong>' + c[2] + '</strong><span class="x-d">' + c[3] + "</span></span></a></li>";
   }).join("");
+  $("accImpact").insertAdjacentHTML("afterbegin", svg("book"));
 
   // Dropdown menus (Services, About, Careers). The About trigger is a link: it navigates on click and opens on hover or arrow keys.
   var drops = [].slice.call(document.querySelectorAll(".x-navitem"));
@@ -262,6 +289,8 @@
   var hoverOK = matchMedia("(hover:hover)").matches;
   drops.forEach(function (it) {
     if (it.firstElementChild.tagName === "BUTTON") it.firstElementChild.addEventListener("click", function () { var o = !it.classList.contains("is-open"); mega(false); drop(it, o); });
+    // Touch screens have no hover: the first tap on the About link opens its dropdown, a second tap follows the link.
+    else it.firstElementChild.addEventListener("click", function (e) { if (hoverOK || it.classList.contains("is-open")) return; e.preventDefault(); mega(false); drop(it, true); });
     if (hoverOK) {
       it.addEventListener("mouseenter", function () { clearTimeout(it._t); drops.forEach(function (o) { if (o !== it) drop(o, false); }); drop(it, true); });
       it.addEventListener("mouseleave", function () { it._t = setTimeout(function () { drop(it, false); }, 150); });
@@ -286,21 +315,54 @@
   document.addEventListener("click", function (e) { drops.forEach(function (it) { if (!it.contains(e.target)) drop(it, false); }); });
 
   // Mobile menu
-  var menu = $("menu"), burger = $("burger");
+  // Phones and tablets: a full-screen sheet that slides up; body scroll is locked while it is open.
+  var menu = $("menu"), burger = $("burger"), menuT = 0;
   function setMenu(open) {
-    menu.hidden = !open; burger.setAttribute("aria-expanded", open);
+    clearTimeout(menuT);
+    burger.setAttribute("aria-expanded", open);
     document.documentElement.classList.toggle("x-menu-open", open);
     document.body.style.overflow = open ? "hidden" : "";
-    if (open) $("menuClose").focus(); else if (document.activeElement && menu.contains(document.activeElement)) burger.focus();
+    if (open) {
+      menu.hidden = false; void menu.offsetWidth; menu.classList.add("is-on"); menu.scrollTop = 0;
+      $("menuClose").focus({ preventScroll: true });
+    } else {
+      menu.classList.remove("is-on");
+      if (document.activeElement && menu.contains(document.activeElement)) burger.focus({ preventScroll: true });
+      menuT = setTimeout(function () { if (!menu.classList.contains("is-on")) menu.hidden = true; }, reduce ? 0 : 320);
+    }
   }
   burger.addEventListener("click", function () { setMenu(true); });
   $("menuClose").addEventListener("click", function () { setMenu(false); });
+  // Same-page nav: a header, dropdown, menu sheet, dock or footer link to the route already showing scrolls back to the top
+  // (instant under reduced motion), closes any dropdown or sheet, and leaves the hash alone. Sub-routes navigate as usual.
+  function routePath(h) { return (h || "").split("?")[0].replace(/^#\/?/, "").replace(/\/+$/, ""); }
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href^="#/"]');
+    if (!a || !a.closest(".x-header, .x-menu, .x-dock, .x-foot")) return;
+    if (routePath(a.getAttribute("href")) !== routePath(location.hash)) return;
+    // Touch screens: the first tap on the About trigger still opens its dropdown.
+    var it = a.parentNode;
+    if (it && it.classList && it.classList.contains("x-navitem") && !hoverOK && !it.classList.contains("is-open")) return;
+    e.preventDefault();
+    mega(false);
+    if (!menu.hidden) setMenu(false);
+    scrollTo({ top: 0, left: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }, true);
+  // Keep Tab inside the open sheet.
+  menu.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab") return;
+    var f = [].filter.call(menu.querySelectorAll("a[href],button:not([disabled])"), function (el) { return el.getClientRects().length > 0; });
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  });
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape" || palOn) return;
     if (!menu.hidden) setMenu(false);
     drops.forEach(function (it) { if (it.classList.contains("is-open")) { drop(it, false); it.firstElementChild.focus(); } });
   });
-  window.addEventListener("resize", function () { if (innerWidth > 900 && !menu.hidden) setMenu(false); });
+  window.addEventListener("resize", function () { if (innerWidth > 1024 && !menu.hidden) setMenu(false); });
 
   // Floating "Talk to us" button: never over form fields, the footer, or the on-screen keyboard.
   var fab = document.querySelector(".x-fab"), fabRoute = false, fabFoot = false, fabField = false;
@@ -332,7 +394,8 @@
       E("Pages", "Industries", "Eight sectors where we work.", "#/industries", "ent", "sectors markets verticals"),
       E("Pages", "Consulting", "Clear advice for every industry.", "#/consulting", "consult", "strategy advice ai readiness architecture review roadmap fractional cto"),
       E("Pages", "Work", "Proof, not promises. Case studies.", "#/work", "star", "case studies portfolio projects clients"),
-      E("Pages", "About us", "Engineering with ownership.", "#/about", "users", "company story values who we are"),
+      E("Pages", "Our story", "Why we started PRAVAHAx, and our name.", "#/about", "flow", "about us company story who we are name pravaha flow engineering with ownership"),
+      E("Pages", "Our beliefs", "Five things we hold to on every project.", "#/about/beliefs", "star", "values principles what we believe " + BELIEFS.map(function (b) { return b[2]; }).join(" ")),
       E("Pages", "Leadership", "The executives who guide PRAVAHAx.", "#/about/leadership", "users", "team executives " + TEAM.map(function (p) { return p.name + " " + p.role; }).join(" ")),
       E("Pages", "Contact", "Tell us what you're building. We reply within 1 business day.", "#/contact", "mail", "start a project enquiry email phone office address hello talk"),
       E("Pages", "Privacy", "Your details stay with us.", "#/privacy", "lock", "legal data policy"),
@@ -345,11 +408,13 @@
     INDUSTRIES.forEach(function (x) { a.push(E("Industries", x.name, x.line, "#/industries/" + x.slug, x.slug, x.ch.join(" ") + " " + x.sol.map(function (s) { return s[0]; }).join(" "))); });
     CASES.forEach(function (c) { var x = findBy(INDUSTRIES, c.ind); a.push(E("Work", c.name, c.title, "#/work/" + c.slug, "star", "case study client " + x.name + " " + c.svcs.map(function (k) { return findBy(SERVICES, k).name; }).join(" ") + " " + c.by)); });
     a.push(E("Careers", "Careers", "Open roles, how we hire and how to apply.", "#/careers", "users", "jobs hiring work with us join"));
-    a.push(E("Careers", "Open roles", ROLES.length + " roles in Chhatrapati Sambhajinagar.", "#/careers/roles", "users", "jobs vacancies openings " + ROLES.map(function (r) { return r[0]; }).join(" ")));
-    ROLES.forEach(function (r) { a.push(E("Careers", r[0], r[1] + " · On-site · Full-time", "#/careers/roles", "code", "job role " + r[1])); });
-    a.push(E("Careers", "Internships", "Six months, a mentor and a real project.", "#/careers/internships", "school", "intern freshers students " + INTERNS.map(function (r) { return r[1]; }).join(" ")));
-    INTERNS.forEach(function (r) { a.push(E("Careers", r[1], "6-month programme with a mentor and a real project.", "#/careers/internships", r[0], "internship intern fresher")); });
-    a.push(E("Careers", "Apply", "Send your application and résumé.", "#/careers/apply", "doc", "application resume cv form"));
+    a.push(E("Careers", "Open roles", ROLES.length + " roles: Chhatrapati Sambhajinagar, Santa Cruz USA (R&D) and remote.", "#/careers/roles", "users", "jobs vacancies openings apply application resume cv hq headquarters santa cruz usa r&d research remote " + ROLES.map(function (r) { return r.t; }).join(" ")));
+    ROLES.forEach(function (r) { a.push(E("Careers", r.t, r.team + " · " + LOCS[r.loc] + " · " + r.type + " · " + r.exp, "#/careers/role/" + r.slug, r.ic, "job role apply " + r.team + " " + r.lvl + " " + r.type + " " + LOCS[r.loc] + (r.fresh ? " fresher welcome graduate" : ""))); });
+    a.push(E("Careers", "Internships", "3 to 6 months, with a mentor and a real project.", "#/careers/internships", "school", "intern internship freshers students graduates stipend " + INTERNS.map(function (r) { return r.t; }).join(" ")));
+    a.push(E("Careers", "In-Plant Training (IPT) 2026–27", "4–6 months of live engineering work for final-year students.", "#/careers/ipt", "education", "ipt in-plant training inplant industrial training final year student college tpo coordinator be btech diploma mca bsc it"));
+    a.push(E("Careers", "IPT registration: Student", "Final-year students: register for IPT 2026–27.", "#/careers/ipt/student", "education", "ipt in-plant training student register registration final year apply"));
+    a.push(E("Careers", "IPT registration: College", "TPOs and IPT coordinators: partner with us or invite us.", "#/careers/ipt/college", "education", "ipt in-plant training college institute tpo coordinator hod principal mou partner campus visit register"));
+    INTERNS.forEach(function (r) { a.push(E("Careers", r.t, "Internship · " + LOCS[r.loc] + " · " + r.dur, "#/careers/internship/" + r.slug, r.ic, "internship intern student fresher apply stipend " + r.team + " " + r.type + " " + LOCS[r.loc])); });
     a.push(E("Life & culture", "Life at PRAVAHAx", "Rooms, rituals, treks and the fine print.", "#/careers/life", "leaf", "culture office team life"));
     a.push(E("Life & culture", "Rooms with names", "The rooms we think in.", "#/careers/life/rooms", "home", ROOMS.map(function (r) { return r[1]; }).join(" ") + " " + SPACES.map(function (s) { return s[0]; }).join(" ") + " office spaces"));
     a.push(E("Life & culture", "Exhibits from the office", "A few corners of the office.", "#/careers/life/exhibits", "eye", "fridge diet coke mugs coffee parcels"));
@@ -357,7 +422,7 @@
     a.push(E("Research & impact", "PRAVAHAx Labs", "The research our team pursues beyond client work: problems we've nearly cracked, led by Devang Patil.", "#/labs", "search", "research lab board r&d principles protocol devang patil masoom mishra"));
     LABS.forEach(function (l) { a.push(E("Research & impact", l[1], l[3] + " · " + l[4], "#/labs", "search", "labs research " + l[0] + " " + l[2])); });
     a.push(E("Research & impact", "Bioinformatics & life sciences", "Our next frontier: software, data and AI for life sciences and healthcare research. Planned under PRAVAHAx Labs.", "#/labs", "search", "bioinformatics life sciences healthcare research biology next frontier planned coming next masoom mishra"));
-    a.push(E("Research & impact", "Teach as we build", "Some of our most important work happens outside client projects.", "#/impact", "school", "social impact community csr schools children students"));
+    a.push(E("Research & impact", "Teach as we build", "Engineers, let loose in classrooms. The kids usually win.", "#/impact", "school", "social impact community csr schools children students science robots careers internet safety game day library"));
     IMPACT.forEach(function (d) { a.push(E("Research & impact", d[1], d[2], "#/impact", d[0], "impact school children students village")); });
     a.push(E("Research & impact", "Publications", "ICT textbook series, Classes 8–10, in Marathi and English.", "#/about/publications", "book", "textbooks books ict information communication technology marathi english school"));
     a.push(E("Life & culture", "Our rituals", "Small habits that keep us curious.", "#/careers/life/rituals", "cup", RITUALS.map(function (r) { return r[0]; }).join(" ")));
@@ -453,7 +518,7 @@
     var done = function () { pal.hidden = true; };
     if (reduce) done(); else palT = setTimeout(done, 180);
     if (!keepFocus && palFrom && document.contains(palFrom) && palFrom.offsetParent !== null) palFrom.focus();
-    else if (!keepFocus) (innerWidth > 1080 ? $("searchBtn") : burger).focus();
+    else if (!keepFocus) (innerWidth > 1024 ? $("searchBtn") : burger).focus();
   }
   function palGo(a) { var h = a.getAttribute("href"); palClose(); if (location.hash === h || (h === "#/" && !location.hash)) route(); else location.hash = h; }
   $("searchBtn").addEventListener("click", function () { palOpen(this); });
@@ -539,6 +604,69 @@
     [].forEach.call(root.querySelectorAll(".x-rv:not(.is-in)"), function (el) { io ? io.observe(el) : el.classList.add("is-in"); });
   }
 
+  // Phones: long card stacks become swipe rows (CSS scroll-snap), each with dots and a counter. No autoplay.
+  var phoneMQ = matchMedia("(max-width: 600px)"), swipeSyncs = [];
+  var SWIPE = ".x-bento, .x-indgrid, .x-cases:not(.x-cases--one), .x-pgrid, .x-beliefs, .x-exhs";
+  function swipeRows(root) {
+    swipeSyncs = swipeSyncs.filter(function (s) { return document.contains(s.row); });
+    [].forEach.call(root.querySelectorAll(SWIPE), function (row) {
+      if (row.hasAttribute("data-swipe")) return;
+      var items = [].slice.call(row.children);
+      if (items.length < 2) return;
+      row.setAttribute("data-swipe", ""); row.classList.add("x-swipe");
+      var label = row.getAttribute("aria-label") || "Cards";
+      var bar = document.createElement("div");
+      bar.className = "x-swipebar"; bar.setAttribute("aria-hidden", "true");
+      bar.innerHTML = '<span class="x-swipedots">' + items.map(function () { return "<i></i>"; }).join("") + '</span><span class="x-swipecount"></span>';
+      row.parentNode.insertBefore(bar, row.nextSibling);
+      var dots = bar.querySelectorAll("i"), count = bar.querySelector(".x-swipecount"), raf = 0, needsFocus = !row.querySelector("a,button");
+      function sync() {
+        raf = 0;
+        var on = phoneMQ.matches, k = 0;
+        if (needsFocus) { if (on) { row.setAttribute("tabindex", "0"); if (!row.getAttribute("aria-label")) row.setAttribute("aria-label", label + ", swipe for more"); } else row.removeAttribute("tabindex"); }
+        if (!on) return;
+        var max = row.scrollWidth - row.clientWidth;
+        if (max > 4 && row.scrollLeft >= max - 4) k = items.length - 1;
+        else {
+          var r0 = row.getBoundingClientRect().left + (parseFloat(getComputedStyle(row).paddingLeft) || 0), best = 1e9;
+          items.forEach(function (it, i) { var d = Math.abs(it.getBoundingClientRect().left - r0); if (d < best) { best = d; k = i; } });
+        }
+        [].forEach.call(dots, function (d, j) { d.classList.toggle("is-on", j === k); });
+        count.textContent = (k + 1) + " / " + items.length;
+      }
+      row.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(sync); }, { passive: true });
+      swipeSyncs.push({ row: row, sync: sync });
+      sync();
+    });
+  }
+  function swipeAll() { swipeSyncs.forEach(function (s) { s.sync(); }); }
+  if (phoneMQ.addEventListener) phoneMQ.addEventListener("change", swipeAll); else if (phoneMQ.addListener) phoneMQ.addListener(swipeAll);
+
+  // Phones and tablets: the floating WhatsApp and "Talk to us" buttons step aside while a call to action
+  // passes through the bottom strip of the screen they sit in.
+  var dodgeIO = null, dodgeOn = [], dodgeRoot = null, dodgeT = 0;
+  function dodge(root) {
+    if (!("IntersectionObserver" in window)) return;
+    dodgeRoot = root;
+    if (dodgeIO) dodgeIO.disconnect();
+    dodgeOn = []; document.documentElement.classList.remove("x-dodge");
+    if (innerWidth > 1024) return;
+    dodgeIO = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { var i = dodgeOn.indexOf(e.target); if (e.isIntersecting && i < 0) dodgeOn.push(e.target); else if (!e.isIntersecting && i > -1) dodgeOn.splice(i, 1); });
+      document.documentElement.classList.toggle("x-dodge", dodgeOn.length > 0);
+    }, { rootMargin: -Math.max(0, innerHeight - 104) + "px 0px 0px 0px" });
+    [].forEach.call(root.querySelectorAll(".x-btns, .x-formfoot, .x-role .x-btn, .x-box .x-btn"), function (el) { dodgeIO.observe(el); });
+  }
+  var dodgeW = innerWidth, dodgeH = innerHeight;
+  addEventListener("resize", function () {
+    clearTimeout(dodgeT);
+    dodgeT = setTimeout(function () {
+      swipeAll();
+      // Ignore the small height changes from mobile browser toolbars.
+      if (dodgeRoot && (innerWidth !== dodgeW || Math.abs(innerHeight - dodgeH) > 120)) { dodgeW = innerWidth; dodgeH = innerHeight; dodge(dodgeRoot); }
+    }, 150);
+  });
+
   // Templates
   var ARR = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   var CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
@@ -575,6 +703,8 @@
   }
   function cta() { return sec("", '<div class="x-cta">' + MARK + '<p class="x-eyebrow">PRAVAHAx Systems Engineering</p><h2 class="x-h2">Got an idea? Let\'s brainstorm it.</h2><p class="x-lead">Tell us what you\'re building. We reply within 1 business day.</p><div class="x-btns"><a class="x-btn x-btn--primary" href="#/contact?need=not-sure">Book a free brainstorm</a><a class="x-btn x-btn--ghost" href="mailto:hello@pravahax.com">hello@pravahax.com</a></div></div>').replace('class="x-sec "', 'class="x-sec x-dark x-ctaband"'); }
   function btn(cls, href, t) { return '<a class="x-btn x-btn--' + cls + '" href="' + href + '">' + t + "</a>"; }
+  // A call to action with an explicit ask opens its own form in the modal (see FORMS); without JS it falls back to #/contact.
+  function fbtn(cls, kind, t) { return '<a class="x-btn x-btn--' + cls + '" href="#/contact" data-form="' + kind + '" aria-haspopup="dialog">' + t + "</a>"; }
 
   function viewServices() {
     return '<section class="x-band"><div class="x-wrap x-rv"><p class="x-eyebrow">Services</p><h1 class="x-h1">Everything you need to build and scale.</h1><p class="x-lead">Pick a service to see exactly what we deliver.</p></div></section>' +
@@ -587,7 +717,7 @@
   function viewDetail(s, i) {
     var n = SERVICES.length, pv = SERVICES[(i + n - 1) % n], nx = SERVICES[(i + 1) % n];
     var inds = s.ind === "all" ? INDUSTRIES : s.ind.map(function (k) { return INDUSTRIES.filter(function (x) { return x.slug === k; })[0]; });
-    return splitHero('<ol class="x-crumb"><li><a href="#/services">Services</a></li><li aria-current="page">' + esc(s.name) + "</li></ol>", s.name, s.intro, btn("primary", "#/contact?need=" + s.slug, "Start a project") + btn("line", "#/contact?need=consulting", "Book a consultation"), s.img) +
+    return splitHero('<ol class="x-crumb"><li><a href="#/services">Services</a></li><li aria-current="page">' + esc(s.name) + "</li></ol>", s.name, s.intro, btn("primary", "#/contact?need=" + s.slug, "Start a project") + fbtn("line", "consult", "Book a consultation"), s.img) +
       sec("", head(esc(s.name), "What we deliver") + boxes(s.deliver.map(function (d) { return d.split("|"); }))) +
       sec("x-mist", '<div class="x-split" style="align-items:start"><div class="x-rv"><h2 class="x-h2">Stack-agnostic.</h2><p class="x-lead">We choose the languages and tools that fit your problem, not our habits.</p></div><div class="x-rv"><h2 class="x-h2">What you get</h2><ul class="x-checks x-checks--2">' + map(s.out, function (o) { return "<li>" + CHK + esc(o) + "</li>"; }) + "</ul></div></div>") +
       sec("", head("", "How we deliver") + steps(PROCESS)) +
@@ -597,7 +727,7 @@
   }
 
   function viewConsulting() {
-    return splitHero('<p class="x-eyebrow">Consulting</p>', "Clear advice for every industry.", "Whatever your sector, we help you decide what to build, what to buy and how to get there.", btn("primary", "#/contact?need=consulting", "Book a free brainstorm") + btn("line", "#/services", "See services"), "consultancy.webp") +
+    return splitHero('<p class="x-eyebrow">Consulting</p>', "Clear advice for every industry.", "Whatever your sector, we help you decide what to build, what to buy and how to get there.", fbtn("primary", "consult", "Book a consultation") + btn("line", "#/services", "See services"), "consultancy.webp") +
       sec("", head("", "How we help") + boxes(OFFERS, "x-grid--4")) +
       sec("x-mist", head("", "Industries we advise") + '<ul class="x-indgrid">' + map(INDUSTRIES, function (x) {
         return '<li class="x-rv"><a class="x-ind" href="#/industries/' + x.slug + '"><div class="x-media"><img src="' + pic(x.img) + '" alt="' + esc(x.alt || x.name) + '" loading="lazy" /></div><div class="x-ind__txt"><h3 class="x-h3">' + esc(x.short === "Logistics" ? x.short : x.name) + "</h3><p>" + esc(x.advise) + "</p></div></a></li>";
@@ -671,11 +801,103 @@
     ["sage", "-1deg", "Simple scales.", "The best systems are the ones nobody has to think about."],
     ["sun", "1.8deg", "Earn its keep.", "If technology doesn't move something that matters, it doesn't belong."],
     ["sky", "-1.4deg", "Thinking is technology.", "Every good system starts as a good question."]];
+  // "In practice": concrete behaviours behind each belief, in the same order as BELIEFS.
+  var PRACTICE = [["We stay on after go-live.", "Bugs we shipped are ours to fix.", "You get the code, the docs and a proper handover."],
+    ["Estimates in plain words, with what could slip.", "Bad news early, not on demo day.", "No jargon in proposals."],
+    ["Fewer moving parts before more features.", "Boring, proven tools where they do the job.", "If training takes a week, we redesign."],
+    ["Every feature is tied to a number someone cares about.", "We will tell you when you don't need AI."],
+    ["We start with questions, not a tech stack.", "We spend time with the people who do the work, on the floor or in the field."]];
   var WHY = [["star", "Real ownership", "Own your work from design to production."], ["flow", "Learn across software, AI and hardware", "Work next to specialists in all three."], ["users", "Mentors who ship", "Senior engineers who still build review your work."], ["home", "A workspace built for focus", "Quiet rooms, good coffee and somewhere to rest."]];
-  var ROLES = [["Full-Stack Developer", "Engineering"], ["Flutter Mobile Developer", "Engineering"], ["Machine Learning Engineer", "AI"], ["Embedded Systems Engineer", "Hardware"], ["DevOps Engineer", "Engineering"], ["UI/UX Designer", "Design"]];
-  var INTERNS = [["code", "Software Engineering Intern"], ["ai", "AI/ML Intern"], ["iot", "IoT & Hardware Intern"]];
-  var HIRE = [["Apply", "Send the form below."], ["Intro call", "A short chat about you and the role."], ["Practical task", "A small task close to the real work."], ["Team conversation", "Meet the people you'd work with."], ["Offer", "A clear offer, in writing."]];
-  var CFAQ = [["Do you hire freshers?", "Yes, through internships and junior roles."], ["Is remote work possible?", "Most roles are on-site in Chhatrapati Sambhajinagar; ask us about flexibility."], ["How long does hiring take?", "Typically two to three weeks."]];
+  // Careers. DRAFT – client to review: every job description and internship below is drafted copy.
+  var LOCS = { csn: "Chhatrapati Sambhajinagar, India", sc: "Santa Cruz, USA (R&D)", remote: "Remote, India" };
+  var ROLES = [
+    { slug: "associate-software-engineer", t: "Associate Software Engineer", team: "Engineering", loc: "csn", type: "On-site", exp: "Fresher", lvl: "Entry-level", fresh: 1, ic: "code",
+      about: "Your first engineering job, on real client projects from week one. You pair with a senior engineer, learn how we build and ship, and take on more as you are ready.",
+      does: ["Build and fix features in web and mobile apps, with code review on every change", "Write tests and help keep our builds green", "Pair with senior engineers on design and debugging", "Join stand-ups, demos and client calls to see how projects run", "Document what you build so the next person can pick it up", "Own a small module of your own within your first few months"],
+      bring: ["A degree in CS, IT or a related field (recent graduates welcome)", "Solid basics in one language: JavaScript, Python, Java or Dart", "Data structures, Git and how the web works", "Curiosity, and the habit of asking when stuck"],
+      nice: ["Projects on GitHub, a hackathon or an internship", "Any React, Flutter or SQL experience"] },
+    { slug: "flutter-mobile-developer", t: "Flutter Mobile Developer", team: "Engineering", loc: "csn", type: "On-site", exp: "1–3 yrs", lvl: "Junior", ic: "phone",
+      about: "Build cross-platform apps for factories, farms and field teams: apps people use all day, often on budget Android phones with patchy networks.",
+      does: ["Build and ship Flutter apps for Android and iOS", "Turn designs into smooth, accessible screens", "Integrate REST APIs, offline storage and sync", "Profile and fix performance on low-end devices", "Publish releases to the Play Store and App Store", "Review code and write tests with the team"],
+      bring: ["1–3 years building Flutter apps in Dart", "At least one app shipped to a store", "State management (Bloc, Riverpod or Provider) and REST APIs", "Comfort with Git and code review"],
+      nice: ["Native Android (Kotlin) or iOS (Swift)", "Offline-first or Bluetooth device apps", "Firebase, push notifications or CI for mobile"] },
+    { slug: "machine-learning-engineer", t: "Machine Learning Engineer", team: "AI", loc: "csn", type: "On-site", exp: "2–4 yrs", lvl: "Mid-level", ic: "ai",
+      about: "Take machine learning out of notebooks and into products: vision on factory lines, forecasting for operations, document AI for back offices.",
+      does: ["Frame business problems as ML problems with the client team", "Collect, clean and label data, and build training pipelines", "Train, evaluate and tune models for vision, forecasting or NLP", "Deploy models as APIs or on edge devices, and monitor them", "Explain results in plain words to non-technical clients", "Own an ML feature from first experiment to production"],
+      bring: ["2–4 years of hands-on ML work, with a model in production", "Strong Python, with PyTorch or TensorFlow and scikit-learn", "A sound grasp of evaluation, overfitting and data leakage", "SQL and comfort with messy real-world data"],
+      nice: ["Computer vision or time-series experience", "Docker, MLOps tools (MLflow, DVC) or edge deployment", "LLM work: retrieval, evaluation or fine-tuning"] },
+    { slug: "embedded-systems-engineer", t: "Embedded Systems Engineer", team: "Hardware", loc: "csn", type: "On-site", exp: "2–4 yrs", lvl: "Mid-level", ic: "iot",
+      about: "Design the firmware and electronics that connect machines and sensors to our software, from bench prototype to devices running in the field.",
+      does: ["Write firmware in C/C++ for ESP32, STM32 and similar microcontrollers", "Bring up boards and debug with scope, logic analyser and multimeter", "Integrate sensors and protocols: Modbus, I2C, SPI, UART and MQTT", "Build OTA updates and reliable low-power operation", "Work with software engineers on device-to-cloud data", "Test and install devices on site with clients"],
+      bring: ["2–4 years of embedded C/C++ in shipped products", "Comfort with schematics and lab instruments", "Experience with an RTOS (FreeRTOS or Zephyr)", "Hands-on work with industrial or field protocols"],
+      nice: ["PCB design (KiCad or Altium)", "Embedded Linux", "Industrial IoT or PLC exposure"] },
+    { slug: "devops-engineer", t: "DevOps Engineer", team: "Engineering", loc: "csn", type: "Hybrid", exp: "3–5 yrs", lvl: "Senior", ic: "cloud",
+      about: "Own the platform our client systems run on: cloud, pipelines, monitoring and security, so releases are boring and outages are rare.",
+      does: ["Design and run cloud infrastructure on AWS, Azure or GCP with Terraform", "Build the CI/CD pipelines every team uses", "Set up monitoring, alerting and on-call that people trust", "Harden systems: secrets, backups, access and patching", "Plan capacity and keep cloud costs honest", "Mentor engineers on deployment and reliability"],
+      bring: ["3–5 years in DevOps, SRE or platform roles", "Strong Linux, networking and scripting (Bash, Python)", "Docker and Kubernetes in production", "Infrastructure as code (Terraform or similar)"],
+      nice: ["Security certifications or compliance work", "On-prem or hybrid deployments for regulated clients", "Observability stacks (Prometheus, Grafana, OpenTelemetry)"] },
+    { slug: "ui-ux-designer", t: "UI/UX Designer", team: "Design", loc: "csn", type: "On-site", exp: "0–2 yrs", lvl: "Junior", fresh: 1, ic: "eye",
+      about: "Design software people use at work: dashboards, apps for field teams, tools for factory floors. Clarity beats decoration here.",
+      does: ["Talk to users and watch how they work, on site where possible", "Turn findings into flows, wireframes and prototypes", "Design clean, accessible interfaces in Figma", "Build and maintain our design system with engineers", "Test designs with real users and iterate", "Hand over specs developers can build without guessing"],
+      bring: ["A portfolio that shows your process, not just final screens", "Strong Figma skills", "Layout, typography and accessibility basics", "Clear writing for labels, errors and empty states"],
+      nice: ["Design for multilingual users (Marathi, Hindi)", "Basic HTML and CSS", "Motion or data-visualisation work"] },
+    { slug: "full-stack-developer", t: "Full-Stack Developer", team: "Engineering", loc: "remote", type: "Remote", exp: "1–3 yrs", lvl: "Junior/Mid", ic: "web",
+      about: "Build web apps end to end for clients across industries, working remotely from anywhere in India with a team that writes things down.",
+      does: ["Build features across React front ends and Node.js or Python back ends", "Design APIs and database schemas (PostgreSQL)", "Write tests and keep pull requests small and reviewable", "Deploy to the cloud and fix what breaks", "Write clear async updates and docs for a distributed team", "Join the team's regular video syncs and demos"],
+      bring: ["1–3 years building production web apps", "React and TypeScript, plus Node.js or Python", "SQL and REST API design", "A reliable home setup and good written English"],
+      nice: ["Next.js, GraphQL or WebSockets", "Docker and CI/CD", "Previous remote work"] },
+    { slug: "technical-writer", t: "Technical Writer / Documentation Engineer", team: "Engineering", loc: "remote", type: "Remote", exp: "0–2 yrs", lvl: "Junior", fresh: 1, ic: "doc",
+      about: "Make our systems easy to understand: API references, user guides, handover documents and the internal wiki new engineers learn from.",
+      does: ["Write and maintain API docs, user guides and release notes", "Interview engineers and turn what they know into clear pages", "Test products yourself so the steps in the docs actually work", "Keep handover documentation complete for every client project", "Own our docs tooling and style guide", "Edit READMEs, proposals and in-app text for clarity"],
+      bring: ["Excellent written English, with samples to share", "Comfort reading code or APIs, even if you don't write much", "Markdown and Git basics", "Attention to detail and a habit of asking why"],
+      nice: ["A CS or engineering background", "Docs-as-code tools (Docusaurus, MkDocs, OpenAPI)", "Writing in Marathi or Hindi"] },
+    { slug: "ai-ml-engineer", t: "AI/ML Engineer", team: "AI", loc: "remote", type: "Remote", exp: "3–5 yrs", lvl: "Senior", ic: "ai",
+      about: "Lead the AI side of client projects, remotely: from scoping what is worth building to running models and LLM systems in production.",
+      does: ["Scope AI projects with clients, and say no to the ones that won't pay off", "Design and build LLM, retrieval and classical ML systems", "Set up evaluation, so we know when a model is good enough", "Deploy, monitor and cost-tune models in production", "Review code and models from other engineers", "Mentor our ML engineers and interns"],
+      bring: ["3–5 years in ML engineering, with systems in production", "Expert Python and PyTorch or TensorFlow", "LLM application work: retrieval, prompting and evaluation", "Cloud deployment and MLOps practice"],
+      nice: ["Published research or open-source work", "Fine-tuning or serving open models", "Experience leading a small team"] },
+    { slug: "bioinformatics-research-engineer", t: "Bioinformatics Research Engineer", team: "R&D", loc: "sc", type: "On-site", exp: "2–5 yrs", lvl: "Mid-level", ic: "flask",
+      about: "Join our R&D department in Santa Cruz and build the software side of our bioinformatics and life-sciences research: pipelines, tools and models for biological data.",
+      does: ["Build and maintain reproducible pipelines for sequencing data", "Develop tools for genomic and protein data analysis", "Benchmark algorithms and write up the results", "Work with researchers to turn questions into analyses", "Run workloads on cloud and HPC, and keep costs in check", "Contribute to papers, posters and open-source releases"],
+      bring: ["An MS or PhD in bioinformatics, computational biology or a related field, or equivalent experience", "2–5 years of research or industry bioinformatics", "Strong Python or R, Linux and the command line", "NGS data and standard tools (for example BWA, GATK, samtools)"],
+      nice: ["Workflow managers: Nextflow or Snakemake", "Machine learning on biological data", "Cloud or HPC cluster experience"] }
+  ];
+  var INTERNS = [
+    { slug: "software-engineering-intern", t: "Software Engineering Intern", team: "Engineering", loc: "csn", type: "On-site", dur: "6 months", ic: "code",
+      who: "Final-year students and recent graduates in CS, IT or a related field.",
+      learn: ["How production software is planned, reviewed and shipped", "Git workflows, code review and testing", "Working with real clients and deadlines", "React, Node.js, Flutter or Python, depending on your project"],
+      does: ["Build features on a live client or internal project", "Fix bugs and write tests", "Join stand-ups, demos and retros", "Present what you built at the end"],
+      mentor: "A senior engineer mentors you for the whole six months, with a weekly one-to-one.",
+      after: "Strong interns may get a full-time offer as an Associate Software Engineer." },
+    { slug: "ai-ml-research-intern", t: "AI/ML Research Intern", team: "AI", loc: "remote", type: "Remote", dur: "3–6 months", ic: "ai",
+      who: "Current Bachelor's or Master's students, and recent graduates, with a strong maths and Python base.",
+      learn: ["How to frame a research question and design experiments", "Model evaluation that holds up to scrutiny", "Reading papers and reproducing results", "Writing up findings clearly"],
+      does: ["Run experiments on vision, NLP or LLM problems", "Clean and prepare datasets", "Reproduce a paper and benchmark against it", "Share results in weekly reviews"],
+      mentor: "A senior AI engineer mentors you, with a weekly video one-to-one and written reviews.",
+      after: "Strong interns may get a full-time offer on our AI team." },
+    { slug: "bioinformatics-research-intern", t: "Bioinformatics Research Intern", team: "R&D", loc: "sc", type: "On-site", dur: "3–6 months", ic: "flask",
+      who: "Current Master's or PhD students, and recent graduates, in bioinformatics, computational biology, biology or CS.",
+      learn: ["Building reproducible pipelines for biological data", "NGS data formats and standard tools", "Working in a research team to real deadlines", "Presenting results to scientists"],
+      does: ["Help build and test analysis pipelines", "Analyse genomic or protein datasets", "Benchmark tools and document the results", "Present your project at the end"],
+      mentor: "A researcher in our Santa Cruz R&D department mentors you, with weekly check-ins.",
+      after: "Strong interns may get a full-time offer in R&D." },
+    { slug: "iot-hardware-intern", t: "IoT & Hardware Intern", team: "Hardware", loc: "csn", type: "On-site", dur: "6 months", ic: "iot",
+      who: "Final-year students and recent graduates in electronics, E&TC, electrical or instrumentation.",
+      learn: ["Microcontroller firmware in C/C++", "Sensors, protocols and board bring-up", "Connecting devices to cloud dashboards", "Field testing with real clients"],
+      does: ["Build and test prototypes on the bench", "Write firmware for ESP32 or STM32 boards", "Help install devices on client sites", "Document wiring, firmware and test results"],
+      mentor: "A senior embedded engineer mentors you for the whole six months, with a weekly one-to-one.",
+      after: "Strong interns may get a full-time offer as an Embedded Systems Engineer." }
+  ];
+  var LEVELS = {
+    "Entry-level": "You learn our stack with a mentor and work on real tickets from your first week, with review on everything you ship. Growth means owning small modules on your own: the step up to Junior.",
+    "Junior": "You work with guidance and own small modules: a screen, an endpoint, a set of docs. Growth means needing less direction and taking features end to end: the step up to Mid-level.",
+    "Junior/Mid": "We place you at Junior or Mid based on your experience. Junior works with guidance and owns small modules; Mid owns features end to end. Either way, growth means more ownership and less direction.",
+    "Mid-level": "You own features end to end: design, build, test, ship and support, and you make sensible calls without being asked. Growth means owning whole systems and mentoring others: the step up to Senior.",
+    "Senior": "You own systems, not just features. You set technical direction with the leads and mentor the people around you. Growth means leading larger projects or a team, or going deeper as a specialist."
+  };
+  var HIRE = [["Apply", "Use the form on the role's page. A person reads every application."], ["Intro call", "30 minutes about you, the role and your questions."], ["Practical task", "A short task close to the real work. No trick puzzles."], ["Team conversation and offer", "Meet the people you'd work with, then a clear offer in writing."]];
+  var IHIRE = [["Apply", "Use the form on this page."], ["Short call", "20 minutes about you and what you want to learn."], ["Small task", "A take-home task sized for students."], ["Offer", "A written offer with your dates and terms."]];
+  var CFAQ = [["Do you hire freshers?", "Yes. Look for the Fresher welcome tag on a role, or apply for an internship."], ["Is remote work possible?", "Yes. Some roles are fully remote within India. Most are on-site at our HQ in Chhatrapati Sambhajinagar, and R&D roles sit in Santa Cruz, USA."], ["How long does hiring take?", "Typically two to three weeks."]];
   var HIRENOTE = '<p class="x-aside">Our hiring process, timelines and open roles are subject to change without notice.</p>';
   var NEEDS = ["Software", "AI & Automation", "Hardware & IoT", "Enterprise", "Cloud & Security", "Consulting", "Not sure yet"];
   // ?need= keys map to options exactly; no prefix matching.
@@ -691,10 +913,10 @@
   function SI(sub, cls, inner) { return '<section class="x-sec ' + cls + '" id="' + (sub === "leadership" || sub === "beliefs" ? sub : "sec-" + sub) + '" data-sub="' + sub + '" tabindex="-1"' + (sub === "leadership" ? ' aria-labelledby="teamTitle"' : sub === "beliefs" ? ' aria-labelledby="beliefsTitle"' : "") + '><div class="x-wrap">' + inner + "</div></section>"; }
   function field(id, label, type, o) {
     o = o || {};
-    var at = ' class="x-input" id="' + id + '" name="' + id + '" data-l="' + label + '" aria-describedby="' + id + '-e' + (o.hint ? " " + id + "-h" : "") + '"' + (o.req ? " required" : "") + (o.auto ? ' autocomplete="' + o.auto + '"' : "") + (type === "tel" ? ' inputmode="tel"' : type === "email" ? ' inputmode="email" autocapitalize="off" spellcheck="false"' : "") + (o.accept ? ' accept="' + o.accept + '"' : "");
-    var ctl = type === "select" ? "<select" + at + '><option value="">Choose one</option>' + map(o.opts, function (v) { return '<option value="' + esc(v) + '">' + esc(v) + "</option>"; }) + "</select>"
+    var at = ' class="x-input" id="' + id + '" name="' + id + '" data-l="' + label + '" aria-describedby="' + id + '-e' + (o.hint ? " " + id + "-h" : "") + '"' + (o.req ? " required" : "") + (o.auto ? ' autocomplete="' + o.auto + '"' : "") + (type === "tel" ? ' inputmode="tel"' : type === "email" ? ' inputmode="email" autocapitalize="off" spellcheck="false"' : "") + (o.accept ? ' accept="' + o.accept + '"' : "") + (o.or ? ' data-or="' + o.or + '"' : "") + (o.max ? ' maxlength="' + o.max + '"' : "");
+    var ctl = type === "select" ? "<select" + at + '><option value="">Choose one</option>' + map(o.opts, function (v) { return '<option value="' + esc(v) + '"' + (o.val === v ? " selected" : "") + ">" + esc(v) + "</option>"; }) + "</select>"
       : type === "textarea" ? "<textarea" + at + ' rows="5"></textarea>' : '<input type="' + type + '"' + at + " />";
-    return '<div class="x-field' + (o.full ? " x-field--full" : "") + '"><label for="' + id + '">' + esc(label) + (o.req ? "" : ' <span class="x-opt">(optional)</span>') + "</label>" + ctl + (o.hint ? '<p class="x-hint" id="' + id + '-h">' + o.hint + "</p>" : "") + '<p class="x-err" id="' + id + '-e" aria-live="polite"></p></div>';
+    return '<div class="x-field' + (o.full ? " x-field--full" : "") + '"><label for="' + id + '">' + esc(label) + (o.req || o.or ? "" : ' <span class="x-opt">(optional)</span>') + "</label>" + ctl + (o.hint ? '<p class="x-hint" id="' + id + '-h">' + o.hint + "</p>" : "") + (o.max ? '<p class="x-hint x-cnt" id="' + id + '-c" aria-live="polite">0 / ' + o.max + "</p>" : "") + '<p class="x-err" id="' + id + '-e" aria-live="polite"></p></div>';
   }
   // Honeypot (Web3Forms "botcheck"), the inline error state with Retry, then Send and the email fallback.
   function foot(label, mail) {
@@ -703,19 +925,59 @@
       '<div class="x-field--full x-formfoot"><button class="x-btn x-btn--primary" type="submit">' + label + '</button><p>Prefer email? Write to <a href="mailto:' + mail + '">' + mail + "</a></p></div>";
   }
 
+  // About is two pages: Our story (#/about, with Our beliefs at #/about/beliefs) and Leadership (#/about/leadership).
+  var KEEP = [["#/about", "Our story"], ["#/about/leadership", "Leadership"], ["#/impact", "Teach as we build"]];
+  function keepReading(cur) {
+    return S("", "padding-block:48px", '<nav class="x-keep x-rv" aria-label="Keep reading"><p class="x-keep__l">Keep reading</p><ul>' + map(KEEP.filter(function (k) { return k[0] !== cur; }), function (k) { return '<li><a class="x-arrow" href="' + k[0] + '">' + k[1] + " " + ARR + "</a></li>"; }) + "</ul></nav>");
+  }
+  function calmHero(eb, h1, sub) { return '<section class="x-band x-band--calm"><div class="x-wrap x-rv"><ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb"><li><a href="#/about">About us</a></li><li aria-current="page">' + eb + '</li></ol><p class="x-eyebrow">' + eb + '</p><h1 class="x-h1 x-h1--sm">' + esc(h1) + '</h1><p class="x-lead">' + esc(sub) + "</p></div></section>"; }
+  // Leaders, read from the team store so names, roles, notes and photos stay in one place.
+  function leaders() {
+    return [].map.call($("teamStore").querySelectorAll(".x-person"), function (li) {
+      var im = li.querySelector("img"), m = li.querySelector(".x-mail"), pn = li.querySelector(".x-pnote"), sg = li.querySelector(".x-pnote__sign");
+      var tone = pn.classList.contains("x-pnote--sky") ? "sky" : pn.classList.contains("x-pnote--mint") ? "sage" : "sun";
+      return { k: li.getAttribute("data-p"), src: im.getAttribute("src"), alt: im.getAttribute("alt"), role: li.querySelector(".x-pnote__role").textContent, name: li.querySelector(".x-pnote__name").textContent, desc: li.querySelector(".x-pnote__desc").textContent, sign: sg ? sg.textContent : "", tone: tone, mail: m.getAttribute("href"), mailT: m.textContent };
+    });
+  }
+  // Our beliefs, a section of Our story (#/about/beliefs scrolls to it): intro, pinboard, then one section per belief.
+  function beliefsSection() {
+    return '<section class="x-blf" id="beliefs" data-sub="beliefs" tabindex="-1" aria-labelledby="beliefsTitle">' +
+      '<div class="x-blf__intro"><div class="x-wrap"><header class="x-blf__head x-rv"><p class="x-eyebrow">Our beliefs</p><h2 class="x-h2" id="beliefsTitle">What we believe.</h2><p class="x-lead">Five things we hold to on every project.</p></header>' +
+      '<ol class="x-beliefs x-rv" aria-label="Our five beliefs">' + map(BELIEFS, function (b, i) { return '<li class="x-belief x-note--' + b[0] + ' x-note--tape" style="--r:' + b[1] + '"><span class="x-belief__n" aria-hidden="true">0' + (i + 1) + '</span><h3 class="x-belief__t">' + esc(b[2]) + '</h3><p>' + esc(b[3]) + "</p></li>"; }) + "</ol></div></div>" +
+      map(BELIEFS, function (b, i) {
+        var n = "0" + (i + 1);
+        return '<section class="x-bdeep' + (i % 2 ? " x-bdeep--flip x-mist" : "") + '" id="belief-' + (i + 1) + '" aria-labelledby="belief-' + (i + 1) + '-t"><div class="x-wrap"><div class="x-bdeep__in">' +
+          '<div class="x-bdeep__num x-rv" aria-hidden="true"><span class="x-bdeep__n">' + n + '</span><span class="x-bdeep__of">' + n + " / 05</span></div>" +
+          '<div class="x-bdeep__body x-rv"><p class="x-eyebrow">Belief ' + n + '</p><h3 class="x-bdeep__t" id="belief-' + (i + 1) + '-t">' + esc(b[2]) + '</h3><p class="x-bdeep__line">' + esc(b[3]) + "</p>" +
+          '<p class="x-bdeep__lbl">In practice</p><ul class="x-bdeep__list">' + map(PRACTICE[i], function (p) { return "<li>" + CHK + esc(p) + "</li>"; }) + "</ul></div></div></div></section>";
+      }) + "</section>";
+  }
+  function viewLeadership() {
+    var L = leaders();
+    return calmHero("Leadership", "The people who lead PRAVAHAx.", "The executives who guide PRAVAHAx and stand behind every engagement.") +
+      S("", "padding-top:clamp(32px,4vw,56px)",
+        '<ul class="x-lgrid" aria-label="Leadership team">' + map(L, function (p, i) {
+          return '<li class="x-lcard x-rv" id="sec-' + p.k + '" data-sub="' + p.k + '" tabindex="-1">' +
+            '<div class="x-lcard__trig" tabindex="0" role="button" aria-expanded="false" aria-controls="lnote-' + p.k + '" aria-label="About ' + esc(p.name) + '"><div class="x-lcard__img"><img src="' + p.src + '" alt="' + esc(p.alt) + '" loading="lazy" /></div></div>' +
+            '<div class="x-lnote x-lnote--' + p.tone + '" id="lnote-' + p.k + '"><p>' + esc(p.desc) + "</p>" + (p.sign ? '<p class="x-lnote__sign" aria-hidden="true">' + esc(p.sign) + "</p>" : "") + "</div>" +
+            '<div class="x-lcard__body"><p class="x-lcard__idx x-mono" aria-hidden="true">0' + (i + 1) + '</p><h3 class="x-h3">' + esc(p.name) + '</h3><p class="x-lcard__role">' + esc(p.role) + '</p><a class="x-lmail" href="' + p.mail + '" aria-label="Email ' + esc(p.name) + ', ' + esc(p.mailT) + '"><span class="x-lmail__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></span><span class="x-lmail__t">' + esc(p.mailT) + "</span></a></div></li>";
+        }) + "</ul>") +
+      keepReading("#/about/leadership") + cta();
+  }
   function viewAbout() {
-    return '<section class="x-band x-band--navy"><div class="x-wrap x-rv"><p class="x-eyebrow">About</p><h1 class="x-h1">Engineering with ownership.</h1><p class="x-lead">PRAVAHAx Systems Engineering is a software and applied AI engineering company from Chhatrapati Sambhajinagar, India.</p><div class="x-btns">' + btn("primary", "#/contact", "Start a project") + btn("ghost", "#/careers", "Join the team") + "</div></div></section>" +
-      S("", "", '<div class="x-split x-story" style="align-items:start"><div class="x-rv"><p class="x-eyebrow">Our story</p><h2 class="x-h2">Making information flow.</h2><div class="x-prose"><p>PRAVAHA means flow. We started PRAVAHAx to help businesses make information flow, from machines, fields and offices to the people who decide.</p><p>Today PRAVAHAx brings together software engineers, AI specialists, hardware designers and consultants, led by an experienced executive team, taking responsibility for every system from first conversation to long-term support.</p></div></div>' +
-        '<div class="x-namenotes x-rv" aria-label="What our name means" role="group">' + map(NAMENOTES, function (n) { return '<p class="x-note x-note--' + n[0] + ' x-note--tape" style="--r:' + n[1] + '">' + esc(n[2]) + "</p>"; }) + "</div></div>") +
-      SI("beliefs", "x-mist", '<div class="x-head x-rv"><div><p class="x-eyebrow">Our beliefs</p><h2 class="x-h2" id="beliefsTitle">What we believe.</h2></div></div><ol class="x-beliefs x-rv">' + map(BELIEFS, function (b, i) { return '<li class="x-belief x-note--' + b[0] + ' x-note--tape" style="--r:' + b[1] + '"><span class="x-belief__n" aria-hidden="true">0' + (i + 1) + '</span><h3 class="x-belief__t">' + esc(b[2]) + '</h3><p>' + esc(b[3]) + "</p></li>"; }) + "</ol>") +
-      SI("leadership", "", '<div class="x-head x-rv"><div><p class="x-eyebrow">Leadership</p><h2 class="x-h2" id="teamTitle">Meet the leadership team.</h2><p class="x-lead">The executives who guide PRAVAHAx and stand behind every engagement.</p></div></div>' + $("teamStore").querySelector(".x-team").outerHTML.replace('<li class="x-person" data-p="masoom">', '<li class="x-person" id="sec-masoom" data-sub="masoom" tabindex="-1">').replace('<li class="x-person" data-p="devang">', '<li class="x-person" id="sec-devang" data-sub="devang" tabindex="-1">').replace(/ data-nid="/g, ' id="')) +
-      S("x-mist", "", '<div class="x-split"><div class="x-frame x-rv"><img src="' + pic("reading-room.webp") + '" alt="The Reading Room at the PRAVAHAx office" loading="lazy" /></div><div class="x-rv"><p class="x-eyebrow">Where we work</p><h2 class="x-h2">Come and see us in Chhatrapati Sambhajinagar.</h2><div class="x-box" style="margin-top:28px"><span class="x-ico">' + svg("pin") + '</span><h3 class="x-h3">Our office</h3><address class="x-addr">B-604 Kasliwal Marvel West, Satara, Beed By Pass,<br />Chhatrapati Sambhajinagar, Maharashtra 431001, India</address><div class="x-btns" style="margin-top:20px">' + btn("primary", "#/contact", "Visit us / Contact") + '<a class="x-btn x-btn--line" href="' + MAPS + '" target="_blank" rel="noopener">Open in Google Maps</a></div></div></div></div>') +
+    return '<section class="x-sec x-story2" aria-labelledby="storyTitle"><div class="x-wrap">' +
+        '<header class="x-story2__head x-rv"><p class="x-eyebrow">Our story</p><h1 class="x-h1" id="storyTitle">Making information flow.</h1><p class="x-fact">PRAVAHAx Systems Engineering · Software and applied AI engineering · Chhatrapati Sambhajinagar, India</p></header>' +
+        '<div class="x-notesrow x-rv" aria-label="What our name means" role="group">' + map(NAMENOTES, function (n) { return '<p class="x-note x-note--' + n[0] + ' x-note--tape" style="--r:' + n[1] + '">' + esc(n[2]) + "</p>"; }) + "</div>" +
+        '<div class="x-read x-rv"><p>PRAVAHA means flow. We started PRAVAHAx to help businesses make information flow, from machines, fields and offices to the people who decide.</p><p>Today PRAVAHAx brings together software engineers, AI specialists, hardware designers and consultants, led by an experienced executive team, taking responsibility for every system from first conversation to long-term support.</p>' +
+        '<div class="x-read__close"><p>Engineering with ownership.</p><div class="x-btns">' + btn("primary", "#/contact", "Start a project") + btn("line", "#/careers", "Join the team") + "</div></div></div></div></section>" +
+      beliefsSection() +
+      S("x-mist", "", '<div class="x-split"><div class="x-frame x-rv"><img src="' + pic("reading-room.webp") + '" alt="The Reading Room at the PRAVAHAx office" loading="lazy" /></div><div class="x-rv"><p class="x-eyebrow">Where we work</p><h2 class="x-h2">Come and see us in Chhatrapati Sambhajinagar.</h2><div class="x-box" style="margin-top:28px"><span class="x-ico">' + svg("pin") + '</span><h3 class="x-h3">Our office</h3><address class="x-addr">B-604 Kasliwal Marvel West, Satara, Beed By Pass,<br />Chhatrapati Sambhajinagar, Maharashtra 431001, India</address><p class="x-addr" style="margin-top:12px"><strong style="color:var(--ink);font-weight:600">R&amp;D department:</strong> Santa Cruz, USA</p><div class="x-btns" style="margin-top:20px">' + fbtn("primary", "visit", "Plan a visit") + '<a class="x-btn x-btn--line" href="' + MAPS + '" target="_blank" rel="noopener">Open in Google Maps</a></div></div></div></div>') +
       SI("publications", "", '<div class="x-split" style="align-items:start"><div class="x-rv"><p class="x-eyebrow">Written by our team</p><h2 class="x-h2">Publications</h2><p class="x-lead">The same team that builds our systems wrote the textbooks students learn ICT from.</p></div>' +
         '<div class="x-box x-rv"><span class="x-ico">' + svg("book") + '</span><h3 class="x-h3">ICT textbook series, Classes 8–10</h3><p>Written by our team in Marathi and English for school students learning information and communication technology.</p></div></div>') +
       S("x-mist", "", head("Beyond client work", "Research and classrooms.") + '<div class="x-grid x-grid--2">' +
         '<a class="x-box x-rv" href="#/labs"><span class="x-ico">' + svg("search") + '</span><h3 class="x-h3">PRAVAHAx Labs</h3><p>Research we\'re doing beyond client work.</p><span class="x-arrow">Visit Labs ' + ARR + "</span></a>" +
         '<a class="x-box x-rv" href="#/impact"><span class="x-ico">' + svg("school") + '</span><h3 class="x-h3">Teach as we build</h3><p>Coding, electronics, books and leaders\u2019 birthdays in schools.</p><span class="x-arrow">See our social impact ' + ARR + "</span></a></div>") +
-      cta();
+      keepReading("#/about") + cta();
   }
 
   // PRAVAHAx Labs: a research pinboard on paper, in the spirit of Life at PRAVAHAx. Board led by Devang Patil, bioinformatics by Masoom Mishra.
@@ -749,45 +1011,295 @@
       S("", "", head("Please read carefully", "The Lab Protocol*") +
         '<div class="x-terms x-mono x-rv"><div class="x-terms__head"><h3>*Lab Protocol</h3><p>Version 1.0 (under peer review)</p></div><ol>' +
         map(PROTOCOL, function (c) { return "<li><span>" + esc(c) + "</span></li>"; }) + '</ol><p class="x-terms__note">*Clause 4 is strictly enforced.</p></div>') +
-      S("x-dark x-ctaband", "", '<div class="x-cta x-rv">' + MARK + '<p class="x-eyebrow">PRAVAHAx Systems Engineering</p><h2 class="x-h2">Got a question worth chasing?</h2><p class="x-lead">Researchers, students and partners: we\u2019d love to compare notes.</p><div class="x-btns">' + btn("primary", "mailto:hello@pravahax.com", "Write to hello@pravahax.com") + btn("ghost", "#/careers", "Explore careers") + "</div></div>");
+      S("x-dark x-ctaband", "", '<div class="x-cta x-rv">' + MARK + '<p class="x-eyebrow">PRAVAHAx Systems Engineering</p><h2 class="x-h2">Got a question worth chasing?</h2><p class="x-lead">Researchers, students and partners: we\u2019d love to compare notes.</p><div class="x-btns">' + fbtn("primary", "research", "Propose a collaboration") + btn("ghost", "mailto:hello@pravahax.com", "Write to hello@pravahax.com") + btn("ghost", "#/careers", "Explore careers") + "</div></div>");
   }
 
-  // Teach as we build: social impact. Calm and text-led.
-  var IMPACT = [["school", "School visits", "We teach school students coding and electronics."],
-    ["gift", "Leaders' birthdays, celebrated in schools", "When one of our executive leaders has a birthday, we celebrate it at a small village school. No cake. Instead, we bring what the school needs: notebooks and stationery, story books for its library, sports equipment, and a meal shared with every child."],
-    ["book", "Books and school kits", "We give books, notebooks and school kits to children who need them at the start of the year."]];
+  // Teach as we build. [icon, title, one-line description, tag, drafted]
+  // Entries marked drafted (the last six) are new copy, drafted for client review.
+  var IMPACT = [["school", "Coding and electronics visits", "We teach kids to code and wire up circuits. A blinking LED gets a round of applause.", "In class", 0],
+    ["gift", "Leaders' birthdays, celebrated in schools", "No cake. Instead: notebooks, stationery, story books, sports kit and a meal with every child.", "No cake", 0],
+    ["book", "Books and school kits", "Books, notebooks and school kits at the start of the year, before the first homework lands.", "Start of the year", 0],
+    ["flask", "Science you can touch", "Experiments with things from the kitchen. Some of them even work the first time.", "Science", 1],
+    ["iot", "Build-a-robot hour", "Motors, sensors and a lot of excited shouting.", "Robotics", 1],
+    ["users", "\u201cWhat does an engineer actually do?\u201d", "Career chats with real people from our team. Spoiler: lots of meetings.", "Careers", 1],
+    ["lock", "Internet street-smarts", "Passwords, scams and why that free game wants your mum\u2019s phone number.", "Online safety", 1],
+    ["ball", "Game day", "Cricket, kabaddi and our engineers losing graciously.", "Sports", 1],
+    ["shelf", "Library corner", "We stock a shelf; the kids pick what goes on it.", "Reading", 1]];
+  I.ball = '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6c2.6 2.6 2.6 10.2 0 12.8M18.4 5.6c-2.6 2.6-2.6 10.2 0 12.8"/>' + dot(12, 12, 1.3);
+  I.shelf = '<path d="M3.5 20.5h17M3.5 11.5h17M5 11.5v-6h2.5v6M8.5 11.5v-7H11v7M14 11.5l1.4-6.4 2.4.5-1.4 5.9M5.5 20.5v-6H8v6M9.5 20.5v-5H12v5"/>' + sq(15, 16.5, 3);
+  var SCHOOLDAY = [["We arrive with a kit", "Notebooks, stationery and story books. Someone always carries the heavy box."], ["Students build something small", "A first program or a simple circuit. It usually works on the second try."], ["We read together", "Story books for the school library. The engineers do the voices."], ["We share a meal", "With every child in the school. The best review we get all week."]];
+  var IMPNOTES = [["sun", "-4deg", "Hard questions welcome."], ["sky", "3deg", "Bring spare batteries."], ["sage", "-2deg", "Who\u2019s teaching whom?"]];
   function viewImpact() {
-    return band("Social impact", "Teach as we build.", "Some of our most important work happens outside client projects.") +
-      S("", "", boxes(IMPACT)) +
-      S("", "padding-top:0", '<div class="x-soft x-rv"><p>Know a school we should visit? Write to <a href="mailto:hello@pravahax.com">hello@pravahax.com</a></p></div>');
+    var tones = ["sun", "sky", "sage"];
+    return '<section class="x-band x-labhero x-imphero" aria-labelledby="impTitle"><div class="x-wrap x-split"><div class="x-rv">' +
+        '<ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb"><li><a href="#/about">About us</a></li><li aria-current="page">Teach as we build</li></ol>' +
+        '<p class="x-eyebrow">Out of the office</p><h1 class="x-h1 x-h1--sm" id="impTitle">Teach as we build.</h1><p class="x-lead x-imphero__sub">Engineers, let loose in classrooms. The kids usually win.</p></div>' +
+        '<div class="x-labnotes x-rv" aria-hidden="true">' + map(IMPNOTES, function (n) { return '<p class="x-note x-note--' + n[0] + ' x-note--tape" style="--r:' + n[1] + '">' + esc(n[2]) + "</p>"; }) + "</div></div></section>" +
+      S("", "", '<div class="x-manifesto x-rv"><p class="x-eyebrow">Why we do it</p><p class="x-manifesto__t">We build software all week. Once in a while we take it to a classroom, where the questions are harder and the audience is far more honest. We bring the kit; they bring the curiosity, and nobody leaves without learning something.</p></div>') +
+      S("x-mist", "", head("In schools", "What we get up to.") + '<ul class="x-pgrid">' + map(IMPACT, function (d, i) {
+        return (d[4] && !IMPACT[i - 1][4] ? "<!-- Drafted for client review: the six programmes below are new copy. -->" : "") +
+          '<li class="x-rv"><article class="x-pcard"><span class="x-ico">' + svg(d[0]) + '</span><h3 class="x-pcard__t">' + esc(d[1]) + '</h3><p class="x-pcard__d">' + esc(d[2]) + '</p><span class="x-pcard__tag x-pcard__tag--' + tones[i % 3] + '">' + esc(d[3]) + "</span></article></li>";
+      }) + "</ul>") +
+      S("", "", '<div class="x-head x-rv" style="justify-content:center;text-align:center"><div><p class="x-eyebrow">How a visit goes</p><h2 class="x-h2">A school day with us.</h2></div></div>' + steps(SCHOOLDAY)) +
+      S("", "padding-top:0", '<div class="x-warm x-rv"><p class="x-eyebrow">Teach as we build</p><h2 class="x-h2">Know a school we should visit?</h2><p class="x-lead">Tell us where it is and what the children need. We reply within 1 business day.</p><div class="x-btns">' + fbtn("primary", "school", "Suggest a school") + btn("line", "mailto:hello@pravahax.com", "hello@pravahax.com") + "</div></div>");
   }
 
+  // ---- Careers: roles first, a page per role and per internship, each with its own form ----
+  var DRAFT = "<!-- DRAFT – client to review -->";
+  function crumb(a, cur) { return '<ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb">' + map(a, function (l) { return '<li><a href="' + l[0] + '">' + l[1] + "</a></li>"; }) + '<li aria-current="page">' + esc(cur) + "</li></ol>"; }
+  function jtags(a) { return '<ul class="x-jtags">' + map(a, function (t) { return '<li class="x-jtag' + (t[1] ? " x-jtag--" + t[1] : "") + '">' + esc(t[0]) + "</li>"; }) + "</ul>"; }
+  function roleTags(r) { return [[r.lvl, "lvl"]].concat(r.fresh ? [["Fresher welcome", "fresh"]] : []); }
+  // Careers list: plain hairline rows grouped by department; each whole row is one link with one arrow.
+  var DEPTS = ["Engineering", "AI", "Hardware", "Design", "R&D"];
+  function catKey(t) { return t.toLowerCase().replace(/[^a-z]/g, ""); }
+  var JF = {
+    cat: [["", "All categories"]].concat(DEPTS.map(function (d) { return [catKey(d), d]; })),
+    loc: [["", "All locations"], ["csn", "Chhatrapati Sambhajinagar"], ["sc", "Santa Cruz, USA (R&D)"], ["remote", "Remote"]],
+    type: [["", "All types"], ["full", "Full-time"], ["intern", "Internship"]]
+  };
+  var JFL = { cat: "Category", loc: "Location", type: "Type" };
+  function jrow(x, intern) {
+    // Three columns on desktop: title | location · type | experience (or duration), then one arrow. Phones fold the last two into one muted line.
+    var exp = intern ? x.dur : (x.exp === "Fresher" ? "Fresher" : x.exp + " experience") + (x.fresh && x.exp !== "Fresher" ? ", freshers welcome" : "");
+    return DRAFT + '<li data-cat="' + catKey(x.team) + '" data-loc="' + x.loc + '" data-type="' + (intern ? "intern" : "full") + '"><a class="x-jrow" href="#/careers/' + (intern ? "internship/" : "role/") + x.slug + '">' +
+      '<span class="x-jrow__t">' + esc(x.t) + '</span><span class="x-jrow__m"><span class="x-jrow__lt">' + esc(LOCS[x.loc] + " · " + x.type) + '</span><span class="x-jrow__e">' + esc(exp) + '</span></span><span class="x-jrow__a">' + ARR + "</span></a></li>";
+  }
+  function jgroup(h, list, intern, g) { return list.length ? '<div class="x-jgroup" data-g="' + g + '"><h3 class="x-jgroup__h">' + esc(h) + ' <span aria-hidden="true">·</span> <span class="x-jgroup__n">' + list.length + "</span></h3><ul class=\"x-jrows\">" + map(list, function (x) { return jrow(x, intern); }) + "</ul></div>" : ""; }
+  function jlistAll() {
+    return map(DEPTS, function (d) { return jgroup(d, ROLES.filter(function (r) { return r.team === d; }), false, catKey(d)); }) + jgroup("Internships", INTERNS, true, "intern");
+  }
+  function jfilters() {
+    return '<div class="x-jfbar"><p class="x-count" id="roleCount" aria-live="polite"></p><div class="x-jfctl"><button class="x-linkbtn" type="button" id="jfClear" hidden>Clear</button><button class="x-btn x-btn--line x-jfopen" type="button" aria-expanded="false" aria-controls="jfSheet" data-jfopen>Filter<span class="x-jfn" id="jfN"></span></button>' +
+      '<div class="x-jfscrim" data-jfclose hidden></div><div class="x-jfsheet" id="jfSheet" role="group" aria-label="Filter roles"><div class="x-jfsheet__head"><p>Filter roles</p><button class="x-jfx" type="button" data-jfclose aria-label="Close filters">&times;</button></div>' +
+      map(["cat", "loc", "type"], function (k) { return '<div class="x-jfsel"><label for="jf-' + k + '">' + JFL[k] + '</label><select class="x-jfin" id="jf-' + k + '" data-k="' + k + '" aria-controls="jobList">' + map(JF[k], function (o) { return '<option value="' + o[0] + '">' + esc(o[1]) + "</option>"; }) + "</select></div>"; }) +
+      '<button class="x-btn x-btn--primary x-jfdone" type="button" data-jfclose>Show results</button></div></div></div>';
+  }
+  function jsec(h, body) { return '<div class="x-jd__sec x-rv"><h2>' + esc(h) + "</h2>" + body + "</div>"; }
+  function jlist(a, soft) { return '<ul class="x-jlist' + (soft ? " x-jlist--soft" : "") + '">' + map(a, function (x) { return "<li>" + esc(x) + "</li>"; }) + "</ul>"; }
+  function jsteps(a) { return '<ol class="x-jsteps">' + map(a, function (s) { return "<li><strong>" + esc(s[0]) + "</strong><p>" + esc(s[1]) + "</p></li>"; }) + "</ol>"; }
+  function lockField(id, label, v, hint) {
+    return '<div class="x-field x-field--full"><label for="' + id + '">' + label + '</label><input type="text" class="x-input" id="' + id + '" name="' + id + '" data-l="' + label + '" value="' + esc(v) + '" readonly aria-readonly="true" aria-describedby="' + id + "-h " + id + '-e" /><p class="x-hint" id="' + id + '-h">' + hint + '</p><p class="x-err" id="' + id + '-e" aria-live="polite"></p></div>';
+  }
+  function consent(id, what, msg) {
+    return '<fieldset class="x-field x-field--full" id="' + id + '" data-req="' + (msg || "Please tick the box to send your application.") + '" data-group="Consent:" aria-describedby="' + id + '-e"><legend class="x-vh">Consent</legend><label class="x-consent"><input type="checkbox" name="' + id + '" value="I agree" /><span>I agree that PRAVAHAx may store and use my details to assess this ' + what + '. See our <a href="#/privacy" target="_blank" rel="noopener">privacy note</a>.</span></label><p class="x-err" id="' + id + '-e" aria-live="polite"></p></fieldset>';
+  }
+  // Application forms. Location blocks follow the role: India roles ask about relocation and CTC in ₹ LPA,
+  // Santa Cruz roles always ask about US work authorisation (no INR fields), remote roles ask about time zone when outside India.
+  var CC = [["+91", "+91 India"], ["+1", "+1 US/Canada"], ["+44", "+44 UK"], ["+971", "+971 UAE"], ["+65", "+65 Singapore"], ["+61", "+61 Australia"], ["+49", "+49 Germany"], ["+977", "+977 Nepal"], ["+880", "+880 Bangladesh"], ["+94", "+94 Sri Lanka"], ["Other", "Other"]];
+  var COUNTRIES = ["India", "United States", "United Kingdom", "Canada", "United Arab Emirates", "Singapore", "Australia", "Germany", "Nepal", "Bangladesh", "Sri Lanka", "Other"];
+  function phoneField(p) {
+    return '<div class="x-field"><label for="' + p + '-phone">Phone</label><div class="x-tel"><select class="x-input x-tel__cc" id="' + p + '-cc" name="' + p + '-cc" data-l="Country code" aria-label="Country code" aria-describedby="' + p + '-cc-e">' +
+      map(CC, function (c) { return '<option value="' + c[0] + '"' + (c[0] === "+91" ? " selected" : "") + ">" + esc(c[1]) + "</option>"; }) + '</select><input type="tel" class="x-input" id="' + p + '-phone" name="' + p + '-phone" data-l="Phone" required autocomplete="tel-national" inputmode="tel" aria-describedby="' + p + '-phone-e" /></div>' +
+      '<p class="x-err" id="' + p + '-cc-e"></p><p class="x-err" id="' + p + '-phone-e" aria-live="polite"></p></div>';
+  }
+  function radios(id, legend, opts, val) {
+    return '<fieldset class="x-field x-field--full" id="' + id + '" data-group="' + esc(legend) + '" data-req="Please choose one." aria-describedby="' + id + '-e"><legend>' + esc(legend) + '</legend><div class="x-pick">' +
+      map(opts, function (v) { return '<label><input type="radio" name="' + id + '" value="' + esc(v) + '"' + (val === v ? " checked" : "") + " /><span>" + esc(v) + "</span></label>"; }) + '</div><p class="x-err" id="' + id + '-e" aria-live="polite"></p></fieldset>';
+  }
+  function cond(show, title, inner) { return '<div class="x-cond x-field--full"' + (show ? ' data-show="' + show + '" hidden' : "") + '><p class="x-cond__h">' + title + "</p>" + inner + "</div>"; }
+  function locBlocks(p, loc, intern) {
+    if (loc === "sc") return cond("", "Working in Santa Cruz, USA",
+      radios(p + "-usauth", "Are you authorised to work in the US?", ["Yes", "No"]) + radios(p + "-spon", "Will you need visa sponsorship now or in the future?", ["Yes", "No"]) +
+      radios(p + "-commute", "Can you commute or relocate to Santa Cruz, CA?", ["Yes, I can commute", "Yes, I'd relocate", "No"]) +
+      (intern ? "" : field(p + "-usd", "Expected salary (USD per year)", "text", { req: 1, full: 1, hint: "For example: 95,000" })));
+    var out = loc === "remote" ? cond("out", "Working remotely from outside India",
+      field(p + "-tz", "Your time zone", "text", { req: 1, full: 1, hint: "For example: GMT+4, Dubai" }) +
+      radios(p + "-overlap", "Can you overlap at least 4 hours with IST 10:00–19:00?", ["Yes", "Partly", "No"]) +
+      radios(p + "-engage", "How would you like to work with us?", ["Employee via a local entity, if available", "Contractor"]))
+      : cond("out", "Moving from outside India",
+      radios(p + "-reloc", "Will you relocate to Chhatrapati Sambhajinagar?", ["Yes", "No", "Open to discuss"]) +
+      radios(p + "-elig", "Your eligibility to work in India", ["Indian citizen", "OCI cardholder", "Needs an employment visa"]) +
+      field(p + "-reltime", "Relocation timeline", "select", { req: 1, full: 1, opts: ["Within 1 month", "1–3 months", "3–6 months", "More than 6 months"] }));
+    return out + (intern ? "" : field(p + "-ctc", "Current CTC (₹ LPA)", "text", { hint: "For example: 6.5" }) + field(p + "-ectc", "Expected CTC (₹ LPA)", "text", { req: 1, hint: "For example: 9" }));
+  }
+  function core(p) {
+    return field(p + "-name", "Full name", "text", { req: 1, auto: "name" }) + field(p + "-email", "Email", "email", { req: 1, auto: "email" }) + phoneField(p) +
+      field(p + "-country", "Country of residence", "select", { req: 1, opts: COUNTRIES, val: "India", auto: "country-name" }) + field(p + "-city", "City", "text", { req: 1, auto: "address-level2" }) +
+      radios(p + "-out", "Do you currently live outside India?", ["No", "Yes"], "No");
+  }
+  function links(p, what) {
+    return field(p + "-li", "LinkedIn", "url", { hint: "Starting with https://" }) + field(p + "-gh", "Portfolio or GitHub", "url") +
+      field(p + "-cv", "Résumé (PDF, up to 5 MB)", "file", { full: 1, accept: ".pdf,application/pdf", or: p + "-cvlink", hint: "Can't upload? Add a link below instead." }) +
+      field(p + "-cvlink", "Résumé link", "url", { full: 1, hint: "Drive or Dropbox, open to anyone with the link." });
+  }
+  function jform(kind, p, x, label, intern, middle) {
+    return '<form class="x-form x-jform" novalidate data-kind="' + kind + '" data-loc="' + x.loc + '" data-done="Application received for ' + esc(x.t) + '. We reply within 5 working days.">' +
+      lockField(p + "-role", label, x.t + " · " + LOCS[x.loc], "You're applying for this " + label.toLowerCase() + " only.") +
+      '<input type="hidden" data-l="Location" value="' + esc(LOCS[x.loc]) + '" /><input type="hidden" data-l="Work type" value="' + esc(x.type + (intern ? " · Internship, " + x.dur : " · Full-time")) + '" />' +
+      core(p) + middle + locBlocks(p, x.loc, intern) + links(p) +
+      field(p + "-why", intern ? "Why this internship?" : "Why this role?", "textarea", { req: 1, full: 1, max: 500 }) +
+      consent(p + "-ok", intern ? "internship application" : "application") + '<p class="x-hint x-field--full x-jready" aria-live="polite">Fill in the required fields to send.</p>' + foot("Send application", MAIL) + "</form>";
+  }
+  function roleForm(r) {
+    return jform("job", "j", r, "Role", false,
+      field("j-exp", "Total experience", "select", { req: 1, opts: ["Fresher", "Less than 1 year", "1–2 years", "2–3 years", "3–5 years", "5+ years"] }) +
+      field("j-org", "Current or last company, or college", "text", { req: 1, auto: "organization" }) +
+      field("j-notice", "Notice period", "select", { req: 1, opts: ["Available now", "15 days", "30 days", "60 days", "90 days"] }) + field("j-start", "Earliest start date", "date"));
+  }
+  function internForm(i) {
+    return jform("intern", "i", i, "Internship", true,
+      field("i-college", "College or university", "text", { req: 1, full: 1, auto: "organization" }) + field("i-degree", "Degree and branch", "text", { req: 1, hint: "For example: B.E. Computer Engineering" }) +
+      field("i-year", "Year of study", "select", { req: 1, opts: ["1st year", "2nd year", "3rd year", "4th year", "5th year", "Master's", "PhD", "Graduated"] }) +
+      field("i-grad", "Graduation year", "select", { req: 1, opts: ["2024 or earlier", "2025", "2026", "2027", "2028", "2029"] }) +
+      field("i-dur", "Duration available", "select", { req: 1, opts: ["3 months", "4 months", "5 months", "6 months"] }) + field("i-start", "Earliest start date", "date", { req: 1 }));
+  }
+  function jdPage(o) {
+    return DRAFT + '<section class="x-band x-band--calm"><div class="x-wrap"><div class="x-jdh"><div class="x-rv">' + crumb(o.crumbs, o.title) +
+      '<p class="x-eyebrow">' + esc(o.eb) + '</p><h1 class="x-h1 x-jtitle">' + esc(o.title) + "</h1>" + jtags(o.tags) +
+      '<div class="x-btns"><button class="x-btn x-btn--primary" type="button" data-jump="jform">' + o.apply + "</button></div></div>" +
+      '<dl class="x-jfacts x-rv">' + map(o.facts, function (f) { return "<div><dt>" + f[0] + "</dt><dd>" + esc(f[1]) + "</dd></div>"; }) + "</dl></div></div></section>" +
+      S("", "", '<div class="x-jsplit"><div class="x-jd">' + o.secs + '</div><aside class="x-jpanel" id="jform" aria-labelledby="jformTitle"><div class="x-jpanel__head"><p class="x-eyebrow">Apply</p><h2 class="x-h2 x-jformhead" id="jformTitle" tabindex="-1">' + esc(o.formTitle) + '</h2><p class="x-hint">We reply within 5 working days.</p></div><div class="x-formcard">' + o.form + "</div></aside></div>");
+  }
+  var JNOTE = '<p class="x-jnote">Process and timelines may change depending on the role and location.</p>';
+  function viewRole(r) {
+    return jdPage({ crumbs: [["#/careers", "Careers"], ["#/careers/roles", "Open roles"]], title: r.t, eb: "Open role · " + r.team, tags: roleTags(r), apply: "Apply for this role",
+      facts: [["Team", r.team], ["Location", LOCS[r.loc]], ["Type", r.type + " · Full-time"], ["Experience", r.exp], ["Level", r.lvl]],
+      secs: jsec("About the role", "<p>" + esc(r.about) + "</p>") + jsec("What you'll do", jlist(r.does)) + jsec("What you'll bring", jlist(r.bring)) + jsec("Nice to have", jlist(r.nice, 1)) +
+        jsec("Career level", '<div class="x-jlevel">' + jtags([[r.lvl, "lvl"]]) + "<p>" + esc(LEVELS[r.lvl]) + "</p></div>") +
+        jsec("How we hire", jsteps(HIRE) + '<p style="margin-top:20px;font-size:15px;color:var(--muted)">Typically two to three weeks, start to finish.</p>' + JNOTE),
+      formTitle: "Apply for " + r.t, form: roleForm(r) });
+  }
+  function viewIntern(i) {
+    return jdPage({ crumbs: [["#/careers", "Careers"], ["#/careers/internships", "Internships"]], title: i.t, eb: "Internship · " + i.team, tags: [["Internship", "lvl"], ["Students & recent grads"]], apply: "Apply for this internship",
+      facts: [["Team", i.team], ["Location", LOCS[i.loc]], ["Type", i.type], ["Duration", i.dur], ["Start", "Rolling"], ["Stipend", "Paid or unpaid, depending on the internship. Discussed before the offer."]],
+      secs: jsec("Who can apply", "<p>" + esc(i.who) + "</p>") + jsec("What you'll learn", jlist(i.learn)) + jsec("What you'll do", jlist(i.does)) +
+        jsec("Mentorship", "<p>" + esc(i.mentor) + "</p>") + jsec("What happens after", "<p>" + esc(i.after) + " Either way, you leave with real work to show.</p>") + jsec("How we hire interns", jsteps(IHIRE) + JNOTE),
+      formTitle: "Apply for the " + i.t + " internship", form: internForm(i) });
+  }
+  var INCL = [["users", "A mentor", "A named mentor and a weekly one-to-one."], ["code", "Real work", "A live project, not a sandbox exercise."], ["star", "Clear terms", "Paid or unpaid, depending on the internship. Discussed before the offer."], ["flow", "A path in", "Strong interns may get a full-time offer."]];
+  function viewInterns() {
+    return DRAFT + '<section class="x-band x-band--calm x-jhero" aria-labelledby="intTitle"><div class="x-wrap x-rv">' + crumb([["#/careers", "Careers"]], "Internships") +
+      '<p class="x-eyebrow">Internships</p><h1 class="x-h1 x-jtitle" id="intTitle">Start with a real project.</h1><p class="x-lead">Internships for current students and recent graduates, each with a mentor and work that ships.</p>' +
+      '<ul class="x-jlocs"><li>' + svg("pin") + "<span><strong>Chhatrapati Sambhajinagar</strong> HQ</span></li><li>" + svg("web") + "<span><strong>Remote</strong> India</span></li><li>" + svg("flask") + "<span><strong>Santa Cruz, USA</strong> R&amp;D</span></li></ul></div></section>" +
+      S("", "padding-top:clamp(24px,4vw,48px)", '<p class="x-count" style="margin-top:0">' + INTERNS.length + ' internships open</p><ul class="x-jrows x-rv">' + map(INTERNS, function (i) { return jrow(i, true); }) + "</ul>") +
+      S("x-mist", "", head("", "What every internship includes") + boxes(INCL, "x-grid--4")) +
+      S("", "", head("", "How we hire interns") + steps(IHIRE) + JNOTE) +
+      S("", "padding-top:0", '<div class="x-slim x-rv"><div><h2 class="x-h3">Graduated a while ago?</h2><p class="x-lead">See our open roles, including those marked Fresher welcome.</p></div><div class="x-btns">' + btn("line", "#/careers", "See open roles") + "</div></div>");
+  }
+  // ---- Careers part B: In-Plant Training (IPT) for final-year students, with student and college registration ----
+  var IPTTRACKS = ["Software (web/mobile)", "AI & Data", "Embedded & IoT", "Cloud & DevOps", "UI/UX"];
+  var IPTMONTHS = ["July 2026", "August 2026", "September 2026", "October 2026", "November 2026", "December 2026", "January 2027", "February 2027", "March 2027", "April 2027", "May 2027", "June 2027"];
+  var IPTDUR = ["4 months", "5 months", "6 months"];
+  var IPTNOTE = '<p class="x-jnote">Programme details, seats and timelines may change each academic year.</p>';
+  var IPTTIME = [["Application", "Register as a student, or your college registers its batch."], ["Screening task", "A short task in your track, emailed to you."], ["Short interview", "A conversation about the task and your work."], ["Offer letter", "An offer letter, and an acceptance letter for your college."]];
+  function iptBand() {
+    return DRAFT + S("x-iptsec", "", '<div class="x-iptband x-rv"><p class="x-iptband__t"><strong>In-Plant Training (IPT) 2026–27.</strong> Final-year students and colleges can now register.</p>' +
+      '<div class="x-iptband__links"><a class="x-btn x-btn--line" href="#/careers/ipt/student">I\'m a student' + ARR + '</a><a class="x-btn x-btn--line" href="#/careers/ipt/college">We\'re a college' + ARR + '</a><a class="x-iptmore" href="#/careers/ipt">About IPT</a></div></div>');
+  }
+  // JD-style page: hero with facts, content left, sticky panel right (stacked below 1024px).
+  function iptPage(o) {
+    return DRAFT + '<section class="x-band x-band--calm"><div class="x-wrap"><div class="x-jdh"><div class="x-rv">' + crumb(o.crumbs, o.cur) +
+      '<p class="x-eyebrow">' + o.eb + '</p><h1 class="x-h1 x-jtitle">' + esc(o.title) + '</h1><p class="x-lead">' + o.lead + "</p>" +
+      '<div class="x-btns"><button class="x-btn x-btn--primary" type="button" data-jump="jform">' + o.cta + "</button></div></div>" +
+      '<dl class="x-jfacts x-rv">' + map(o.facts, function (f) { return "<div><dt>" + f[0] + "</dt><dd>" + esc(f[1]) + "</dd></div>"; }) + "</dl></div></div></section>" +
+      S("", "", '<div class="x-jsplit"><div class="x-jd">' + o.secs + '</div><aside class="x-jpanel" id="jform" aria-labelledby="jformTitle"><div class="x-jpanel__head"><p class="x-eyebrow">' + o.peb + '</p><h2 class="x-h2 x-jformhead" id="jformTitle" tabindex="-1">' + esc(o.ptitle) + "</h2>" + (o.phint ? '<p class="x-hint">' + o.phint + "</p>" : "") + "</div>" + o.panel + "</aside></div>");
+  }
+  function iptList(a) { return '<ul class="x-jlist">' + map(a, function (x) { return "<li><strong>" + esc(x[0]) + "</strong> " + esc(x[1]) + "</li>"; }) + "</ul>"; }
+  function viewIpt() {
+    return iptPage({ crumbs: [["#/careers", "Careers"]], cur: "In-Plant Training", eb: "In-Plant Training · 2026–27", title: "In-Plant Training at PRAVAHAx",
+      lead: "Final-year students spend 4–6 months on live engineering work with our team. A real placement, not a certificate course.", cta: "Register",
+      facts: [["Duration", "4–6 months"], ["Location", "Chhatrapati Sambhajinagar (HQ)"], ["For", "Final-year students"], ["Tracks", "5"], ["Academic year", "2026–27"]],
+      secs: jsec("What IPT at PRAVAHAx is", "<p>In-Plant Training is the last 4–6 months of your degree or diploma, spent inside a working company. Here that means live engineering work: real code, real devices and real reviews, alongside our team.</p><p>It is not a certificate course. You join a project that ships.</p>") +
+        jsec("Tracks", jlist(IPTTRACKS)) +
+        jsec("How it runs", jsteps([["Onboarding week", "Tools, codebase, team rituals and how we work."], ["A mentor and a real project", "A named mentor and a live project of your own."], ["Weekly reviews", "What shipped, what's stuck and what's next."], ["Mid-term review", "A formal check on progress, shared with your college."], ["Final demo and evaluation", "You demo your work to the team and are evaluated."], ["Completion", "A completion certificate, plus your college's evaluation and attendance documents."]])) +
+        jsec("Who can apply", "<p>Final-year BE/BTech, Diploma, MCA and BSc IT students whose university requires or allows IPT.</p>") +
+        jsec("What colleges get", iptList([["An MoU", "on request."], ["Monthly reports", "of attendance and progress for every student."], ["A faculty touchpoint", "one contact at PRAVAHAx for your coordinator."], ["A campus visit", "for orientation or selection."]]) + '<p class="x-iptnext"><a class="x-iptmore" href="#/careers/ipt/college">Register as a college</a></p>') +
+        jsec("Location", "<p>On-site at our HQ in Chhatrapati Sambhajinagar. Remote only where your college permits it.</p>") +
+        jsec("Timeline", jsteps(IPTTIME)) +
+        jsec("FAQ", faq([["Is there a stipend?", "Paid or unpaid, depending on the internship and track. We discuss it with you before the offer."], ["Do I get a certificate?", "Yes. A completion certificate at the end, along with the evaluation and attendance documents your college needs."], ["Can I choose my track?", "You give a first and second preference when you register. We confirm your track after the screening task, based on your skills and our live projects."], ["Is remote allowed?", "IPT is on-site in Chhatrapati Sambhajinagar. Remote is possible only where your college permits it."], ["What documents do I need?", "Your résumé, your college's NOC or permission letter if it issues one, and your university's IPT or evaluation format. We provide the offer or acceptance letter your college asks for."]]) + IPTNOTE),
+      peb: "Register", ptitle: "Register for IPT 2026–27", phint: "Choose the one that fits you.",
+      panel: '<ul class="x-iptopts"><li><a class="x-iptopt" href="#/careers/ipt/student"><strong>Register as a student</strong><span class="x-iptopt__d">Final-year BE/BTech, Diploma, MCA or BSc IT.</span><span class="x-jrow__a">' + ARR + '</span></a></li>' +
+        '<li><a class="x-iptopt" href="#/careers/ipt/college"><strong>Register as a college</strong><span class="x-iptopt__d">TPOs and IPT coordinators: partner with us or invite us.</span><span class="x-jrow__a">' + ARR + "</span></a></li></ul>" });
+  }
+  function iptH(t) { return '<p class="x-iptform__h x-field--full">' + t + "</p>"; }
+  function radiosOpt(id, legend, opts) {
+    return '<fieldset class="x-field x-field--full" id="' + id + '" data-group="' + esc(legend) + '" aria-describedby="' + id + '-e"><legend>' + esc(legend) + ' <span class="x-opt">(optional)</span></legend><div class="x-pick">' +
+      map(opts, function (v) { return '<label><input type="radio" name="' + id + '" value="' + esc(v) + '" /><span>' + esc(v) + "</span></label>"; }) + '</div><p class="x-err" id="' + id + '-e" aria-live="polite"></p></fieldset>';
+  }
+  function checksReq(id, legend, opts) {
+    return '<fieldset class="x-field x-field--full" id="' + id + '" data-group="' + esc(legend) + '" data-req="Choose at least one." aria-describedby="' + id + '-e"><legend>' + esc(legend) + '</legend><div class="x-pick">' +
+      map(opts, function (v) { return '<label><input type="checkbox" name="' + id + '" value="' + esc(v) + '" /><span>' + esc(v) + "</span></label>"; }) + '</div><p class="x-err" id="' + id + '-e" aria-live="polite"></p></fieldset>';
+  }
+  var IPTHIDDEN = '<input type="hidden" data-l="Programme" value="In-Plant Training (IPT) 2026–27" />';
+  var IPTREADY = '<p class="x-hint x-field--full x-jready" aria-live="polite">Fill in the required fields to send.</p>';
+  function iptStudentForm() {
+    return '<form class="x-form x-jform" novalidate data-kind="ipts" data-done="Registration received. We\'ll email you the screening task within 7 working days.">' + IPTHIDDEN +
+      iptH("About you") + field("ps-name", "Full name", "text", { req: 1, auto: "name" }) + field("ps-email", "Email", "email", { req: 1, auto: "email" }) + phoneField("ps") +
+      field("ps-city", "City", "text", { req: 1, auto: "address-level2" }) + field("ps-dob", "Date of birth", "date", { auto: "bday" }) +
+      iptH("Academics") + field("ps-college", "College or institute", "text", { req: 1, auto: "organization" }) +
+      field("ps-univ", "Affiliated university or board", "text", { req: 1, hint: "For example: Dr. Babasaheb Ambedkar Marathwada University" }) +
+      field("ps-degree", "Degree", "select", { req: 1, opts: ["BE/BTech", "Diploma", "MCA", "BSc IT", "Other"] }) + field("ps-branch", "Branch", "text", { req: 1, hint: "For example: Computer Engineering" }) +
+      field("ps-sem", "Current semester", "select", { req: 1, opts: ["Semester 5", "Semester 6", "Semester 7", "Semester 8", "Other"] }) +
+      field("ps-cgpa", "CGPA or percentage", "text", { hint: "For example: 8.2 or 76%" }) + field("ps-grad", "Expected graduation year", "select", { req: 1, opts: ["2026", "2027", "2028"] }) +
+      iptH("IPT details") + field("ps-start", "IPT start month", "select", { req: 1, opts: IPTMONTHS }) + field("ps-dur", "Duration", "select", { req: 1, opts: IPTDUR }) +
+      radios("ps-mode", "Mode required by your college", ["On-site", "Remote allowed", "Not sure"]) +
+      field("ps-track", "Preferred track", "select", { req: 1, opts: IPTTRACKS }) + field("ps-track2", "Second preference", "select", { opts: IPTTRACKS }) +
+      radiosOpt("ps-letter", "Does your college require an offer or acceptance letter?", ["Yes", "No"]) +
+      radiosOpt("ps-noc", "College NOC or permission letter", ["Have it", "Will get it", "Not required"]) +
+      iptH("Faculty or TPO coordinator") + field("ps-fname", "Coordinator name", "text") + field("ps-femail", "Coordinator email", "email") + field("ps-fphone", "Coordinator phone", "tel") +
+      iptH("Skills and work") + field("ps-skills", "Key skills", "text", { full: 1, hint: "Comma-separated. For example: React, Python, Arduino" }) + field("ps-gh", "GitHub or portfolio", "url", { full: 1, hint: "Starting with https://" }) +
+      field("ps-proj", "Your best project", "textarea", { full: 1, max: 300, hint: "What it does, your part and the stack." }) +
+      field("ps-cv", "Résumé (PDF, up to 5 MB)", "file", { full: 1, accept: ".pdf,application/pdf", or: "ps-cvlink", hint: "Can't upload? Add a link below instead." }) +
+      field("ps-cvlink", "Résumé link", "url", { full: 1, hint: "Drive or Dropbox, open to anyone with the link." }) +
+      consent("ps-ok", "IPT registration", "Please tick the box to send your registration.") + IPTREADY + foot("Send registration", MAIL) + "</form>";
+  }
+  function viewIptStudent() {
+    return iptPage({ crumbs: [["#/careers", "Careers"], ["#/careers/ipt", "In-Plant Training"]], cur: "Student registration", eb: "In-Plant Training · Students", title: "Register for IPT as a student",
+      lead: "Tell us about you, your college's IPT rules and the track you want. We'll email you a screening task within 7 working days.", cta: "Register now",
+      facts: [["Duration", "4–6 months"], ["Location", "Chhatrapati Sambhajinagar (HQ)"], ["Next step", "Screening task"], ["Reply", "Within 7 working days"]],
+      secs: jsec("In short", "<p>IPT at PRAVAHAx is 4–6 months of live engineering work in one of five tracks, with a mentor, weekly reviews and a final demo. You leave with a completion certificate and the documents your college needs.</p>" + '<p><a class="x-iptmore" href="#/careers/ipt">About IPT</a></p>') +
+        jsec("What to prepare", jlist(["Your résumé as a PDF up to 5 MB, or a link to it.", "Your college, university, branch, semester and CGPA or percentage.", "The IPT start month, duration and mode your college requires.", "Whether you have your college's NOC or permission letter.", "Your faculty or TPO coordinator's contact details.", "Your GitHub or portfolio, and one project you're proud of."])) +
+        jsec("What happens next", jsteps(IPTTIME.slice(1)) + IPTNOTE),
+      peb: "Register", ptitle: "IPT registration: Student", phint: "Takes about 5 minutes. Fields marked optional can be skipped.", panel: '<div class="x-formcard">' + iptStudentForm() + "</div>" });
+  }
+  function iptCollegeForm() {
+    return '<form class="x-form x-jform" novalidate data-kind="iptc" data-done="Thank you. Our team will contact your coordinator within 5 working days.">' + IPTHIDDEN +
+      iptH("Institute") + field("pc-inst", "Institute name", "text", { req: 1, auto: "organization" }) +
+      field("pc-type", "Type", "select", { req: 1, opts: ["Engineering college", "Polytechnic", "University department", "Other"] }) +
+      field("pc-univ", "Affiliated university or board", "text", { req: 1 }) + field("pc-code", "AICTE or approval code", "text") +
+      field("pc-city", "City", "text", { req: 1, auto: "address-level2" }) + field("pc-state", "State", "text", { req: 1, auto: "address-level1" }) +
+      field("pc-web", "Website", "url", { hint: "Starting with https://" }) +
+      iptH("Coordinator") + field("pc-cname", "Name", "text", { req: 1, auto: "name" }) +
+      field("pc-desig", "Designation", "select", { req: 1, opts: ["TPO", "IPT coordinator", "HoD", "Principal", "Other"] }) +
+      field("pc-email", "Email", "email", { req: 1, auto: "email" }) + phoneField("pc") +
+      field("pc-alt", "Alternate contact", "text", { hint: "Name and phone or email" }) +
+      iptH("Students") + checksReq("pc-branches", "Branches or programmes", ["Computer", "IT", "E&TC/ECE", "Electrical", "Mechanical", "AI&DS", "MCA", "Other"]) +
+      field("pc-count", "Approx. number of students", "number", { req: 1 }) + field("pc-start", "IPT start month", "select", { req: 1, opts: IPTMONTHS }) +
+      field("pc-dur", "Duration", "select", { req: 1, opts: IPTDUR }) + radios("pc-mode", "Mode allowed", ["On-site", "Remote", "Hybrid"]) +
+      iptH("Requirements") + radiosOpt("pc-mou", "MoU required?", ["Yes", "No"]) +
+      group("pc-eval", "Evaluation format your university needs", "pc-eval", ["Attendance sheets", "Monthly reports", "Final viva", "Other"]) +
+      field("pc-stipend", "Stipend expectations", "text") +
+      iptH("Campus visit") + radiosOpt("pc-visit", "Would you like us to visit for an orientation or selection drive?", ["Yes", "No"]) +
+      '<div class="x-cond x-field--full" data-when="pc-visit=Yes" hidden><p class="x-cond__h">Visit details</p>' +
+      field("pc-date1", "Preferred date", "date", { req: 1 }) + field("pc-date2", "Alternative date", "date") + field("pc-aud", "Expected audience size", "number", { req: 1 }) + "</div>" +
+      iptH("Notes") + field("pc-notes", "Notes", "textarea", { full: 1, max: 500 }) +
+      consent("pc-ok", "IPT registration", "Please tick the box to send your registration.") + IPTREADY + foot("Send registration", MAIL) + "</form>";
+  }
+  function viewIptCollege() {
+    return iptPage({ crumbs: [["#/careers", "Careers"], ["#/careers/ipt", "In-Plant Training"]], cur: "College registration", eb: "In-Plant Training · Colleges", title: "Partner with us for IPT",
+      lead: "For TPOs, IPT coordinators and HoDs: register your institute and we'll contact your coordinator within 5 working days.", cta: "Register now",
+      facts: [["Typical intake", "5–15 students"], ["Location", "Chhatrapati Sambhajinagar (HQ)"], ["MoU", "On request"], ["Reply", "Within 5 working days"]],
+      secs: jsec("What partnering looks like", iptList([["MoU.", "Signed on request, in your university's format or ours."], ["Reports.", "Monthly attendance and progress reports for every student."], ["Campus visit.", "An orientation or selection visit to your campus."], ["Coordinator.", "One named contact at PRAVAHAx for your faculty coordinator."], ["Intake.", "Typically 5–15 students per college each batch, depending on tracks and seats."]])) +
+        jsec("Tracks we offer", jlist(IPTTRACKS)) +
+        jsec("How it works", jsteps([["You register", "Tell us about your institute, students and university requirements."], ["We call your coordinator", "To agree on seats, dates, documents and an MoU if needed."], ["Orientation or selection", "On campus or online, followed by a screening task and short interviews."], ["Offer letters", "Offer and acceptance letters for each selected student, then monthly reports through to the final evaluation."]]) + IPTNOTE) +
+        '<p class="x-iptnext"><a class="x-iptmore" href="#/careers/ipt">About IPT</a></p>',
+      peb: "Register", ptitle: "IPT registration: College", phint: "Takes about 5 minutes. Fields marked optional can be skipped.", panel: '<div class="x-formcard">' + iptCollegeForm() + "</div>" });
+  }
   function viewCareers() {
-    var teams = ["All", "Engineering", "AI", "Hardware", "Design"];
-    var form = '<form class="x-form" novalidate data-to="hello@pravahax.com" data-kind="careers" data-done="Received. We\'ll reply within 1 business day.">' +
-      field("a-name", "Full name", "text", { req: 1, auto: "name" }) + field("a-email", "Email", "email", { req: 1, auto: "email" }) +
-      field("a-phone", "Phone", "tel", { auto: "tel" }) + field("a-role", "Role", "select", { req: 1, opts: ROLES.map(function (r) { return r[0]; }).concat(INTERNS.map(function (r) { return r[1]; }), ["General application"]) }) +
-      field("a-url", "LinkedIn or portfolio URL", "url", { auto: "url" }) + field("a-cv", "Résumé", "file", { accept: ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document", hint: "PDF, DOC or DOCX, up to 5 MB." }) +
-      field("a-cvlink", "Résumé link (Drive/Dropbox)", "url", { full: 1, hint: "Share a link if you'd rather not upload, or as well as the file." }) +
-      field("a-note", "Short note", "textarea", { full: 1 }) + foot("Send application", "hello@pravahax.com") + "</form>";
-    return '<section class="x-hero x-hero--careers" aria-labelledby="carTitle"><img class="x-hero__img" src="' + pic("hero-home.webp") + '" alt="PRAVAHAx engineer typing on a backlit laptop" /><div class="x-hero__body"><div class="x-wrap" style="width:100%"><div class="x-hero__copy x-rv">' +
-      '<p class="x-eyebrow">Join PRAVAHAx Systems Engineering</p><h1 class="x-h1 x-h1--sm" id="carTitle">Do the best work of your career.</h1><p class="x-lead">Build real systems for real industries, with a team that trusts you from day one.</p><div class="x-btns">' +
-      btn("primary", "#/careers/roles", "See open roles") + btn("ghost", "#/careers/internships", "Internships") + '</div>' +
-      '<ul class="x-hfacts" aria-label="At a glance"><li>Chhatrapati Sambhajinagar, India</li><li>Roles &amp; internships</li><li>Reply within 1 business day</li></ul></div></div></div></section>' +
+    return '<section class="x-band x-band--calm x-jhero" aria-labelledby="carTitle"><div class="x-wrap x-rv">' +
+      '<p class="x-eyebrow">Careers at PRAVAHAx</p><h1 class="x-h1 x-jtitle" id="carTitle">Do the best work of your career.</h1>' +
+      '<p class="x-lead">Real systems, a team that trusts you from day one: at our HQ in Chhatrapati Sambhajinagar, our R&amp;D department in Santa Cruz, USA, or remote.</p></div></section>' +
+      SI("roles", "x-jroles", '<div class="x-head x-rv" style="margin-bottom:20px"><div><h2 class="x-h2">Open roles</h2></div></div>' + jfilters() +
+        '<div class="x-jlist2" id="jobList">' + jlistAll() + '<p class="x-jempty" id="jfEmpty" hidden>No roles match these filters. <button class="x-linkbtn" type="button" data-jfclear>Clear filters</button></p></div>') +
+      S("", "padding-top:0", '<div class="x-cta x-rv">' + MARK + '<p class="x-eyebrow">Internships</p><h2 class="x-h2">Students and recent grads: start with a real project.</h2><p class="x-lead">Internships of 3 to 6 months, each with a mentor. In Chhatrapati Sambhajinagar, remote, or at our R&amp;D department in Santa Cruz, USA.</p><div class="x-btns">' + btn("primary", "#/careers/internships", "Explore internships") + "</div></div>") +
+      S("x-mist", "", head("Where we work", "Two locations, plus remote.") + '<div class="x-grid x-jlocgrid">' +
+        '<div class="x-box x-rv"><span class="x-ico">' + svg("pin") + '</span><h3 class="x-h3">Headquarters</h3><p>Chhatrapati Sambhajinagar, Maharashtra, India. Engineering, AI, hardware and design.</p></div>' +
+        '<div class="x-box x-rv"><span class="x-ico">' + svg("flask") + '</span><h3 class="x-h3">R&amp;D department</h3><p>Santa Cruz, USA. Bioinformatics and life-sciences research.</p></div>' +
+        '<div class="x-box x-rv"><span class="x-ico">' + svg("web") + '</span><h3 class="x-h3">Remote</h3><p>Selected roles and internships, from anywhere in India.</p></div></div>') +
       S("", "", head("", "Why PRAVAHAx") + boxes(WHY, "x-grid--4")) +
-      S("x-mist", "", '<div class="x-split"><div class="x-frame x-rv"><img src="' + pic("green-lounge-garden.webp") + '" alt="The Green Lounge garden at the PRAVAHAx office" loading="lazy" /></div><div class="x-rv"><p class="x-eyebrow">Off the clock</p><h2 class="x-h2">Life at PRAVAHAx</h2><p class="x-lead">Rooms with names, treks with snacks, and debates nobody wins. Mostly.</p><div class="x-btns">' + btn("primary", "#/careers/life", "See life at PRAVAHAx →") + "</div></div></div>") +
-      SI("roles", "", head("", "Open roles") + '<div class="x-rv"><div class="x-filters" role="group" aria-label="Filter roles by team">' + map(teams, function (t, i) {
-        return '<button class="x-filter" type="button" data-filter="' + t + '" aria-pressed="' + (i ? "false" : "true") + '">' + t + "</button>";
-      }) + '</div><p class="x-count" id="roleCount" aria-live="polite">6 open roles</p><ul class="x-roles">' + map(ROLES, function (r) {
-        return '<li class="x-role" data-team="' + r[1] + '"><div><h3 class="x-h3">' + esc(r[0]) + '</h3><p class="x-role__meta"><span>' + r[1] + "</span><span>Chhatrapati Sambhajinagar · On-site</span><span>Full-time</span></p></div>" +
-          '<button class="x-btn x-btn--line" type="button" data-apply="' + esc(r[0]) + '" aria-label="Apply for ' + esc(r[0]) + '">Apply →</button></li>';
-      }) + "</ul></div>") +
-      SI("internships", "x-mist", head("Internships", "Start with a real project.") + '<div class="x-grid">' + map(INTERNS, function (d) {
-        return '<div class="x-box x-box--flex x-rv"><span class="x-ico">' + svg(d[0]) + '</span><h3 class="x-h3">' + esc(d[1]) + '</h3><p>6-month programme with a mentor and a real project.</p><button class="x-btn x-btn--line" type="button" data-apply="' + esc(d[1]) + '" aria-label="Apply for ' + esc(d[1]) + '">Apply →</button></div>';
-      }) + "</div>") +
-      S("", "", head("", "How we hire") + steps(HIRE, "x-steps--5") + HIRENOTE) +
-      SI("apply", "x-mist", '<div class="x-formwrap">' + head("Apply", "Tell us about you.") + '<div class="x-formcard x-rv">' + form + "</div></div>") +
-      S("", "", head("", "FAQ") + faq(CFAQ) + HIRENOTE) + cta();
+      S("x-mist", "", '<div class="x-split"><div class="x-frame x-rv"><img src="' + pic("green-lounge-garden.webp") + '" alt="The Green Lounge garden at the PRAVAHAx office" loading="lazy" /></div><div class="x-rv"><p class="x-eyebrow">Off the clock</p><h2 class="x-h2">Life at PRAVAHAx</h2><p class="x-lead">Rooms with names, treks with snacks, and debates nobody wins. Mostly.</p><div class="x-btns">' + btn("primary", "#/careers/life", "See life at PRAVAHAx") + "</div></div></div>") +
+      S("", "", head("", "How we hire") + steps(HIRE) + JNOTE) +
+      S("x-mist", "", head("", "FAQ") + faq(CFAQ) + HIRENOTE) + cta();
   }
 
   // Life at PRAVAHAx
@@ -810,8 +1322,8 @@
   var CLAUSES = ["Diet Coke counts as hydration. It does not count as lunch.", "“Quick call” means under 15 minutes. Anyone exceeding this buys samosas.", "“Works on my machine” is not a deployment strategy.", "The last person to take the coffee pot refills it. This clause is non-negotiable and legally binding (spiritually).", "The Power Nap Suite has no timer. It does, however, have witnesses.", "All arguments in the Debate Room must be settled with data, a whiteboard or chai, in that order.", "Books borrowed from the Reading Room must return. Eventually. Ideally this year.", "Stand-ups are for standing. Sit-downs are for chai.", "Dark mode is mandatory after 7 pm. Light-mode users will be gently counselled.", "Asking “why?” is always allowed. Asking it five times is called root-cause analysis."];
   function viewLife() {
     return '<section class="x-hero x-hero--life" aria-labelledby="lifeTitle"><img class="x-hero__img" src="' + pic("debate-room-lounge.webp") + '" alt="The Debate Room lounge at the PRAVAHAx office" /><div class="x-hero__body"><div class="x-wrap" style="width:100%"><div class="x-hero__copy x-rv">' +
-      '<ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb"><li><a href="#/">Home</a></li><li><a href="#/careers">Careers</a></li><li aria-current="page">Life at PRAVAHAx</li></ol>' +
-      '<p class="x-eyebrow">Life at PRAVAHAx</p><p class="x-statement">Thinking is Technology.</p><h1 class="x-h1 x-h1--sm" id="lifeTitle">Curiosity has a place here. So do snacks.</h1><p class="x-lead">The rooms we think in, the trips we take, and the small rituals that keep our people curious, and occasionally caffeinated.</p><div class="x-btns">' +
+      '<ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb"><li><a href="#/">Home</a></li><li><a href="#/about">About</a></li><li aria-current="page">Life at PRAVAHAx</li></ol>' +
+      '<p class="x-eyebrow">About</p><p class="x-statement">Thinking is Technology.</p><h1 class="x-h1 x-h1--sm" id="lifeTitle">Curiosity has a place here. So do snacks.</h1><p class="x-lead">The rooms we think in, the trips we take, and the small rituals that keep our people curious, and occasionally caffeinated.</p><div class="x-btns">' +
       btn("primary", "#/careers", "See open roles") + btn("ghost", "#/careers/internships", "Explore internships") + "</div></div></div></div></section>" +
       SI("rooms", "", head("The office", "Rooms with names (and opinions)", "Every room has a job. Some take it more seriously than others.") +
         '<div class="x-bento">' + map(ROOMS, function (r, i) {
@@ -870,7 +1382,9 @@
       ["Services", SERVICES.map(function (s) { return L("#/services/" + s.slug, s.name); }).concat([L("#/" + CONSULTING.slug, CONSULTING.name)])],
       ["Industries", INDUSTRIES.map(function (x) { return L("#/industries/" + x.slug, x.name); })],
       ["Work", CASES.map(function (c) { return L("#/work/" + c.slug, c.name); })],
-      ["Company", [L("#/about/leadership", "Leadership"), L("#/about/publications", "Publications"), L("#/labs", "PRAVAHAx Labs"), L("#/impact", "Impact: Teach as we build"), L("#/careers/life", "Life at PRAVAHAx"), L("#/careers/roles", "Open roles"), L("#/careers/internships", "Internships"), L("#/careers/apply", "Apply")]],
+      ["Company", [L("#/about", "Our story"), L("#/about/beliefs", "Our beliefs"), L("#/about/leadership", "Leadership"), L("#/about/publications", "Publications"), L("#/labs", "PRAVAHAx Labs"), L("#/impact", "Impact: Teach as we build"), L("#/careers/life", "Life at PRAVAHAx")]],
+      ["Careers", [L("#/careers", "Careers"), L("#/careers/roles", "Open roles"), L("#/careers/ipt", "In-Plant Training (IPT)"), L("#/careers/ipt/student", "IPT registration: Student"), L("#/careers/ipt/college", "IPT registration: College")].concat(ROLES.map(function (r) { return L("#/careers/role/" + r.slug, r.t); }))],
+      ["Internships", [L("#/careers/internships", "All internships")].concat(INTERNS.map(function (i) { return L("#/careers/internship/" + i.slug, i.t); }))],
       ["Legal", ["privacy", "terms", "cookies", "accessibility"].map(function (k) { return L("#/" + k, LEGAL[k][0]); })]
     ];
     return '<section class="x-band"><div class="x-wrap x-rv"><ol class="x-crumb x-crumb--chev" aria-label="Breadcrumb"><li><a href="#/">Home</a></li><li aria-current="page">Sitemap</li></ol><h1 class="x-h1">Sitemap</h1><p class="x-lead">Every page on this site, in one place.</p></div></section>' +
@@ -888,8 +1402,11 @@
   // Forms
   var page = $("view-page");
   function check(el) {
+    if (el.disabled) return "";
     var v = el.value.trim();
     if (el.required && !v) return el.tagName === "SELECT" ? "Please choose one." : "Please fill this in.";
+    if (el.hasAttribute("data-or") && !(el.files && el.files[0]) && !(($(el.getAttribute("data-or")) || {}).value || "").trim()) return "Upload your résumé as a PDF, or add a link below.";
+    if (el.type === "file" && el.files && el.files[0] && /pdf/.test(el.accept || "") && !/\.pdf$/i.test(el.files[0].name)) return "Upload a PDF, or add a résumé link below.";
     if (v && el.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "Enter a valid email, like name@company.com.";
     if (v && el.type === "tel" && !/^\+?[\d\s()-]{7,}$/.test(v)) return "Enter a valid phone number.";
     if (v && el.type === "url" && !/^https?:\/\/\S+\.\S+/.test(v)) return "Enter a full link starting with https://.";
@@ -904,7 +1421,7 @@
   function validate(f) {
     var bad = [];
     [].forEach.call(f.querySelectorAll(".x-input"), function (el) { var m = check(el); setErr(el, m); if (m) bad.push(el); });
-    [].forEach.call(f.querySelectorAll("fieldset[data-req]"), function (fs) { var ok = fs.querySelector("input:checked"); setErr(fs, ok ? "" : "Pick at least one."); if (!ok) bad.push(fs.querySelector("input")); });
+    [].forEach.call(f.querySelectorAll("fieldset[data-req]:not([disabled])"), function (fs) { var ok = fs.querySelector("input:checked"); setErr(fs, ok ? "" : fs.getAttribute("data-req") || "Pick at least one."); if (!ok) bad.push(fs.querySelector("input")); });
     return bad;
   }
   // ================================================================
@@ -922,16 +1439,77 @@
   var WEB3FORMS_FILES = false;
   var MAIL = "hello@pravahax.com";
   function keyReady() { return !!WEB3FORMS_KEY && WEB3FORMS_KEY !== WEB3FORMS_KEY_PLACEHOLDER; }
+  // Purpose-built forms for calls to action with an explicit ask (data-form="..."). They open in the contact modal
+  // and send through the same Web3Forms / mailto path. The general "Let's talk." form stays for general contact.
+  function group(id, legend, name, opts) {
+    return '<fieldset class="x-field x-field--full" id="' + id + '" data-group="' + esc(legend) + '"><legend>' + esc(legend) + ' <span class="x-opt">(optional)</span></legend><div class="x-pick">' +
+      map(opts, function (o) { return '<label><input type="checkbox" name="' + name + '" value="' + esc(o) + '" /><span>' + esc(o) + "</span></label>"; }) + "</div></fieldset>";
+  }
+  var FORMS = {
+    // The role and internship forms live on their own pages (no modal html); these give collect() the subject and sender.
+    job: { subj: function (v) { return "Application: " + v("j-role") + " — " + v("j-name"); }, name: "j-name", email: "j-email" },
+    intern: { subj: function (v) { return "Internship application: " + v("i-role") + " — " + v("i-name"); }, name: "i-name", email: "i-email" },
+    ipts: { subj: function (v) { return "IPT registration (student): " + v("ps-name") + " — " + v("ps-college"); }, name: "ps-name", email: "ps-email" },
+    iptc: { subj: function (v) { return "IPT registration (college): " + v("pc-inst") + " — " + v("pc-cname"); }, name: "pc-cname", email: "pc-email" },
+    school: { eb: "Teach as we build", title: "Suggest a school", lead: "Tell us where it is and what the children need. We reply within 1 business day.",
+      subj: function () { return "School suggestion"; }, name: "s-you", email: "s-email", send: "Send suggestion",
+      done: "Thank you. We'll reach out to the school and keep you posted.",
+      html: function () {
+        return field("s-school", "School name", "text", { req: 1, full: 1 }) + field("s-town", "Village or town", "text", { req: 1 }) + field("s-district", "District and state", "text", { req: 1 }) +
+          field("s-type", "Type of school", "select", { opts: ["Government", "Aided", "Private", "Other"] }) + field("s-grades", "Grades", "text", { hint: "For example, 5–10" }) +
+          field("s-students", "Approx. number of students", "number") + field("s-contact", "Contact person at the school", "text") +
+          field("s-crole", "Their role", "select", { opts: ["Headteacher", "Teacher", "Parent", "Other"] }) + field("s-phone", "Phone", "tel", { req: 1, hint: "The school contact's, or yours" }) +
+          field("s-email", "Email", "email", { full: 1 }) +
+          group("s-help", "What would help most?", "help", ["Coding & electronics", "Science you can touch", "Books & kits", "Career chats", "Something else"]) +
+          field("s-you", "Your name", "text", { req: 1, auto: "name" }) + field("s-rel", "Your relation to the school", "text", { hint: "Teacher, parent, alumnus, neighbour…" }) +
+          field("s-notes", "Notes", "textarea", { full: 1 });
+      } },
+    research: { eb: "PRAVAHAx Labs", title: "Propose a collaboration", lead: "Researchers, students and partners: tell us the question you want to chase. We reply within 1 business day.",
+      subj: function (v) { return "Research collaboration — " + v("r-name"); }, name: "r-name", email: "r-email", send: "Send proposal",
+      done: "Thank you. Our research team will read it and reply within 1 business day.",
+      html: function () {
+        return field("r-name", "Name", "text", { req: 1, auto: "name" }) + field("r-email", "Email", "email", { req: 1, auto: "email" }) +
+          field("r-org", "University, lab or company", "text", { auto: "organization" }) + field("r-who", "You are a", "select", { opts: ["Researcher", "Student", "Industry partner", "Other"] }) +
+          field("r-area", "Area", "select", { full: 1, opts: ["Cryptography", "Diskless Windows", "Edge detection with particle swarm optimisation", "Bioinformatics & life sciences", "Something else"] }) +
+          field("r-msg", "Your question or idea", "textarea", { req: 1, full: 1 }) + field("r-link", "Paper, repo or profile link", "url", { full: 1 });
+      } },
+    consult: { eb: "Consulting", title: "Book a consultation", lead: "Tell us the decision in front of you. We reply within 1 business day to set a time.",
+      subj: function (v) { return "Consultation request — " + v("k-name") + (v("k-company") ? ", " + v("k-company") : ""); }, name: "k-name", email: "k-email", send: "Request consultation",
+      done: "Received. We'll reply within 1 business day to set up your consultation.",
+      html: function () {
+        return field("k-name", "Name", "text", { req: 1, auto: "name" }) + field("k-email", "Work email", "email", { req: 1, auto: "email" }) +
+          field("k-company", "Company", "text", { req: 1, auto: "organization" }) + field("k-phone", "Phone", "tel", { auto: "tel" }) +
+          field("k-industry", "Industry", "select", { opts: INDUSTRIES.map(function (x) { return x.name; }).concat(["Other"]) }) +
+          field("k-format", "How would you like to meet?", "select", { opts: ["Video call", "At your office", "At our office"] }) +
+          group("k-topic", "What do you want advice on?", "topic", OFFERS.map(function (o) { return o[1]; }).concat(["Not sure yet"])) +
+          field("k-msg", "What's the decision in front of you?", "textarea", { req: 1, full: 1 });
+      } },
+    visit: { eb: "Our office", title: "Plan a visit", lead: "Come and see us in Chhatrapati Sambhajinagar. Pick a day and we'll confirm a time.",
+      subj: function (v) { return "Office visit request — " + v("v-name"); }, name: "v-name", email: "v-email", send: "Request a visit",
+      done: "Thank you. We'll confirm a time within 1 business day.",
+      html: function () {
+        return field("v-name", "Name", "text", { req: 1, auto: "name" }) + field("v-email", "Email", "email", { req: 1, auto: "email" }) +
+          field("v-phone", "Phone", "tel", { req: 1, auto: "tel" }) + field("v-date", "Preferred date", "date") +
+          field("v-time", "Preferred time", "select", { opts: ["Morning", "Afternoon", "Either"] }) + field("v-people", "How many people?", "number") +
+          field("v-msg", "What would you like to see or discuss?", "textarea", { full: 1 });
+      } }
+  };
   function collect(f) {
-    var val = function (id) { var el = $(id); return el ? el.value.trim() : ""; }, lines = [], fd = new FormData(), careers = f.getAttribute("data-kind") === "careers", needsDone = false;
-    var name = careers ? val("a-name") : val("c-name"), email = careers ? val("a-email") : val("c-email");
-    var subj = careers ? "Application: " + val("a-role") + " — " + name : "Project enquiry — " + name + (val("c-company") ? ", " + val("c-company") : "");
+    var val = function (id) { var el = $(id); return el ? el.value.trim() : ""; }, lines = [], extra = [], fd = new FormData(), kind = f.getAttribute("data-kind"), careers = kind === "careers", F = FORMS[kind], needsDone = !!F;
+    var name = F ? val(F.name) : careers ? val("a-name") : val("c-name"), email = F ? val(F.email) : careers ? val("a-email") : val("c-email");
+    var subj = F ? F.subj(val) : careers ? "Application: " + val("a-role") + " — " + name : "Project enquiry — " + name + (val("c-company") ? ", " + val("c-company") : "");
     fd.append("access_key", WEB3FORMS_KEY);
     fd.append("subject", subj);
     fd.append("from_name", name);
-    fd.append("replyto", email);
+    if (email) fd.append("replyto", email);
+    if (F) [].forEach.call(f.querySelectorAll("input[type=hidden][data-l]"), function (h) { if (h.value) { extra.push(h.getAttribute("data-l") + ": " + h.value); fd.append(h.getAttribute("data-l"), h.value); } });
+    if (F) [].forEach.call(f.querySelectorAll("fieldset[data-group]:not([disabled])"), function (fs) {
+      var n = [].map.call(fs.querySelectorAll("input:checked"), function (c) { return c.value; }).join(", ");
+      if (n) { extra.push(fs.getAttribute("data-group") + " " + n); fd.append(fs.getAttribute("data-group"), n); }
+    });
     [].forEach.call(f.querySelectorAll(".x-input"), function (el) {
       var label = el.getAttribute("data-l"), v;
+      if (el.disabled) return;
       if (el.type === "file") {
         var file = el.files && el.files[0];
         if (!file) return;
@@ -950,7 +1528,7 @@
       lines.push("What we need: " + n); fd.append("What we need", n);
       var ind = val("c-industry"); if (ind) { lines.push("Enquiry from: " + ind); fd.append("Enquiry from", ind); }
     }
-    return { fd: fd, href: "mailto:" + MAIL + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(lines.join("\n")) };
+    return { fd: fd, href: "mailto:" + MAIL + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(lines.concat(extra).join("\n")) };
   }
   function showFail(f, href) {
     var s = f.querySelector("[data-status]");
@@ -964,9 +1542,9 @@
     s.hidden = false;
     window.location.href = href;
   }
-  function showDone(f) {
+  function showDone(f, note) {
     var wrap = f.parentNode;
-    wrap.innerHTML = '<div class="x-done" tabindex="-1" role="status"><span class="x-ico">' + svg("check") + '</span><h2 class="x-h3">' + esc(f.getAttribute("data-done")) + '</h2><p>Prefer email? Write to <a href="mailto:' + MAIL + '">' + MAIL + "</a></p></div>";
+    wrap.innerHTML = '<div class="x-done" tabindex="-1" role="status"><span class="x-ico">' + svg("check") + '</span><h2 class="x-h3">' + esc(f.getAttribute("data-done")) + "</h2>" + (note ? "<p>" + note + "</p>" : "") + '<p>Prefer email? Write to <a href="mailto:' + MAIL + '">' + MAIL + "</a></p></div>";
     wrap.querySelector(".x-done").focus();
   }
   function submitForm(f) {
@@ -974,7 +1552,12 @@
     var bad = validate(f); if (bad.length) { bad[0].focus(); return; }
     var d = collect(f);
     if (f.querySelector("[name=botcheck]").checked) { showDone(f); return; }
-    if (!keyReady()) { sendByMail(f, d.href); return; }
+    if (!keyReady()) {
+      // Role and internship forms: hand the application to the email app, and show the success state on the same page.
+      var fk = f.getAttribute("data-kind");
+      if (/^(job|intern|ipts|iptc)$/.test(fk)) { window.location.href = d.href; showDone(f, "Your email app should open with your " + (/^ipt/.test(fk) ? "registration" : "application") + " filled in. Press send there to finish."); return; }
+      sendByMail(f, d.href); return;
+    }
     var b = f.querySelector("[type=submit]"), label = b.textContent;
     b.disabled = true; b.textContent = "Sending…"; f.setAttribute("aria-busy", "true");
     fetch("https://api.web3forms.com/submit", { method: "POST", headers: { Accept: "application/json" }, body: d.fd })
@@ -1002,6 +1585,7 @@
   }
   onForms("change", function (e) {
     var el = e.target, R = formRoot(el);
+    if (el.type === "checkbox" && el.closest("fieldset[data-req]") && el.checked && el.name !== "need") { setErr(el.closest("fieldset"), ""); return; }
     if (el.getAttribute("aria-invalid") === "true" || el.type === "file") setErr(el, check(el));
     if (el.name === "need") {
       var isNS = el.value === "Not sure yet";
@@ -1021,17 +1605,79 @@
       return;
     }
     if (formRoot(e.target) === cm) return;
-    var b = e.target.closest ? e.target.closest("[data-filter],[data-apply]") : null; if (!b) return;
-    if (b.hasAttribute("data-filter")) {
-      var t = b.getAttribute("data-filter"), n = 0;
-      [].forEach.call(page.querySelectorAll("[data-filter]"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      [].forEach.call(page.querySelectorAll(".x-role"), function (r) { var on = t === "All" || r.getAttribute("data-team") === t; r.hidden = !on; if (on) n++; });
-      $("roleCount").textContent = n + (n === 1 ? " open role" : " open roles") + (t === "All" ? "" : " in " + t);
-    } else {
-      $("a-role").value = b.getAttribute("data-apply"); setErr($("a-role"), "");
-      $("sec-apply").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-      $("a-name").focus({ preventScroll: true });
-    }
+    // Careers filters: open/close the phone sheet, and Clear.
+    var o = e.target.closest ? e.target.closest("[data-jfopen],[data-jfclose],[data-jfclear],#jfClear") : null; if (!o) return;
+    if (o.hasAttribute("data-jfopen")) jfSheet(true);
+    else if (o.hasAttribute("data-jfclose")) jfSheet(false);
+    else { [].forEach.call(page.querySelectorAll(".x-jfin"), function (s) { s.value = ""; }); jfApply(true); }
+  });
+  // Category, Location and Type filter the grouped rows; the state lives in the hash query (#/careers?cat=ai&loc=remote&type=intern).
+  function jfApply(write) {
+    var list = $("jobList"); if (!list) return;
+    var st = {}, q = [], n = 0, on = 0;
+    [].forEach.call(page.querySelectorAll(".x-jfin"), function (s) { st[s.getAttribute("data-k")] = s.value; if (s.value) { q.push(s.getAttribute("data-k") + "=" + s.value); on++; } });
+    [].forEach.call(list.querySelectorAll(".x-jgroup"), function (g) {
+      var k = 0;
+      [].forEach.call(g.querySelectorAll("li"), function (li) { var ok = ["cat", "loc", "type"].every(function (x) { return !st[x] || li.getAttribute("data-" + x) === st[x]; }); li.hidden = !ok; if (ok) k++; });
+      g.hidden = !k; n += k;
+      var gn = g.querySelector(".x-jgroup__n"); if (gn) gn.textContent = k;
+    });
+    $("roleCount").textContent = n + (n === 1 ? " open position" : " open positions");
+    $("jfClear").hidden = !on; $("jfEmpty").hidden = !!n; $("jfN").textContent = on ? " (" + on + ")" : "";
+    var done = page.querySelector(".x-jfdone"); if (done) done.textContent = "Show " + n + (n === 1 ? " result" : " results");
+    if (write && history.replaceState) { var base = location.hash.split("?")[0] || "#/careers"; history.replaceState(null, "", base + (q.length ? "?" + q.join("&") : "")); }
+  }
+  function jfInit(query) {
+    [].forEach.call(page.querySelectorAll(".x-jfin"), function (s) {
+      var m = (query || "").match(new RegExp("(?:^|&)" + s.getAttribute("data-k") + "=([^&]*)")), v = m ? decodeURIComponent(m[1]) : "";
+      s.value = [].some.call(s.options, function (op) { return op.value === v; }) ? v : "";
+    });
+    jfApply(false);
+  }
+  function jfSheet(open) {
+    var sh = $("jfSheet"), b = page.querySelector("[data-jfopen]"), sc = page.querySelector(".x-jfscrim"); if (!sh) return;
+    sh.classList.toggle("is-open", open); sc.hidden = !open; b.setAttribute("aria-expanded", open);
+    document.documentElement.classList.toggle("x-jf-lock", open);
+    if (open) sh.querySelector("select").focus(); else b.focus({ preventScroll: true });
+  }
+  page.addEventListener("keydown", function (e) { if (e.key === "Escape" && $("jfSheet") && $("jfSheet").classList.contains("is-open")) jfSheet(false); });
+  // Role and internship forms: location blocks, the 500-character counter, and Send stays off until the form is valid.
+  function jSync(f) {
+    var out = f.querySelector('input[name$="-out"]:checked'), yes = !!out && out.value === "Yes";
+    [].forEach.call(f.querySelectorAll("[data-show=out]"), function (b) {
+      b.hidden = !yes;
+      [].forEach.call(b.querySelectorAll("input,select,textarea,fieldset"), function (x) { x.disabled = !yes; if (!yes && x.id && $(x.id + "-e")) setErr(x, ""); });
+    });
+    // IPT forms: a block shown only for one answer, e.g. data-when="pc-visit=Yes".
+    [].forEach.call(f.querySelectorAll("[data-when]"), function (b) {
+      var w = b.getAttribute("data-when").split("="), r = f.querySelector('input[name="' + w[0] + '"]:checked'), on = !!r && r.value === w[1];
+      b.hidden = !on;
+      [].forEach.call(b.querySelectorAll("input,select,textarea,fieldset"), function (x) { x.disabled = !on; if (!on && x.id && $(x.id + "-e")) setErr(x, ""); });
+    });
+    var w = f.querySelector("textarea[maxlength]"), c = w && $(w.id + "-c"); if (c) c.textContent = w.value.length + " / " + w.getAttribute("maxlength");
+    if (f.getAttribute("aria-busy")) return;
+    var ok = ![].some.call(f.querySelectorAll(".x-input"), function (el) { return !!check(el); }) &&
+      ![].some.call(f.querySelectorAll("fieldset[data-req]:not([disabled])"), function (fs) { return !fs.querySelector("input:checked"); });
+    var b = f.querySelector("[type=submit]"); if (b) b.disabled = !ok;
+    var r = f.querySelector(".x-jready"); if (r) r.textContent = ok ? "" : "Fill in the required fields to send.";
+  }
+  function jEvt(e) {
+    var el = e.target;
+    if (el.classList && el.classList.contains("x-jfin")) { jfApply(true); return; }
+    var f = el.closest && el.closest("form.x-jform"); if (!f) return;
+    if (/-country$/.test(el.id) && el.value) { var y = f.querySelector('input[name$="-out"][value="' + (el.value === "India" ? "No" : "Yes") + '"]'); if (y) y.checked = true; }
+    if (el.type === "radio" && el.checked) { var fs = el.closest("fieldset"); if (fs) setErr(fs, ""); }
+    if (/-cvlink$/.test(el.id)) { var fl = f.querySelector("[data-or]"); if (fl && fl.getAttribute("aria-invalid") === "true") setErr(fl, check(fl)); }
+    jSync(f);
+  }
+  page.addEventListener("input", jEvt);
+  page.addEventListener("change", jEvt);
+  // "Apply" on a role or internship page, and its sticky phone bar: a smooth move to the form on the same page.
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-jump]") : null; if (!b) return;
+    var t = $(b.getAttribute("data-jump")); if (!t) return;
+    t.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    var h = $("jformTitle"); if (h) h.focus({ preventScroll: true });
   });
   // Contact modal: contact calls to action in the content (and the floating "Talk to us") open it in place.
   // The header and footer Contact links, and the search, still go to the #/contact page.
@@ -1050,9 +1696,35 @@
         field("c-msg", "Message", "textarea", { req: 1, full: 1 }) + foot("Send message", MAIL) + "</form>";
     }
     function focusables() { return [].filter.call(card.querySelectorAll(FOCUSABLE), function (el) { return el.getClientRects().length > 0; }); }
+    var cmT = $("cmTitle"), cmL = $("cmLead"), T0 = cmT.textContent, L0 = cmL.textContent;
+    function show(firstField) {
+      document.body.style.paddingRight = Math.max(0, innerWidth - document.documentElement.clientWidth) + "px";
+      document.documentElement.classList.add("x-cm-lock");
+      card.style.transform = ""; card.scrollTop = 0;
+      cm.hidden = false;
+      void cm.offsetWidth;
+      cm.classList.add("is-on");
+      var first = matchMedia("(hover: none)").matches ? card : firstField;
+      (first || card).focus({ preventScroll: true });
+    }
+    function openForm(a, F, kind) {
+      clearTimeout(closeT);
+      opener = a;
+      cmT.textContent = F.title; cmL.textContent = F.lead;
+      body.innerHTML = '<form class="x-form" novalidate data-to="' + MAIL + '" data-kind="' + kind + '" data-done="' + esc(F.done) + '">' + F.html() + foot(F.send, MAIL) + "</form>";
+      // A consultation booked from a service or industry page carries that page along.
+      var parts = location.hash.replace(/^#\/?/, "").split("?")[0].split("/"), ctx = parts[1] && ((parts[0] === "services" && findBy(SERVICES, parts[1])) || (parts[0] === "industries" && findBy(INDUSTRIES, parts[1])));
+      if (kind === "consult" && ctx) {
+        var h = document.createElement("input"); h.type = "hidden"; h.id = "k-about"; h.setAttribute("data-l", "Enquiry from"); h.value = ctx.name;
+        body.querySelector("form").insertBefore(h, body.querySelector(".x-hp"));
+      }
+      from.textContent = ctx && kind === "consult" ? F.eb + " · About: " + ctx.name : F.eb; from.hidden = false;
+      show(body.querySelector(".x-input"));
+    }
     function open(a) {
       clearTimeout(closeT);
       opener = a;
+      cmT.textContent = T0; cmL.textContent = L0;
       var q = (a.getAttribute("href") || "").split("?")[1] || "";
       var qp = function (k) { var m = q.match(new RegExp("(?:^|&)" + k + "=([^&]*)")); try { return m ? decodeURIComponent(m[1]).toLowerCase() : ""; } catch (err) { return ""; } };
       var parts = location.hash.replace(/^#\/?/, "").split("?")[0].split("/");
@@ -1070,14 +1742,7 @@
       }
       if (ind) $("c-industry").value = ind.name;
       from.textContent = label ? "About: " + label : ""; from.hidden = !label;
-      document.body.style.paddingRight = Math.max(0, innerWidth - document.documentElement.clientWidth) + "px";
-      document.documentElement.classList.add("x-cm-lock");
-      card.style.transform = ""; card.scrollTop = 0;
-      cm.hidden = false;
-      void cm.offsetWidth;
-      cm.classList.add("is-on");
-      var first = matchMedia("(hover: none)").matches ? card : $("c-name");
-      first.focus({ preventScroll: true });
+      show($("c-name"));
     }
     function close(instant) {
       if (cm.hidden) return;
@@ -1086,13 +1751,15 @@
       document.body.style.paddingRight = "";
       var done = function () { cm.hidden = true; body.innerHTML = ""; card.style.transform = ""; card.style.transition = ""; };
       clearTimeout(closeT);
-      if (instant || reduce) done(); else closeT = setTimeout(done, 200);
-      if (opener && !instant && document.contains(opener)) opener.focus({ preventScroll: true });
+      if (instant || reduce) done(); else closeT = setTimeout(done, 280);
+      if (opener && !instant && document.contains(opener)) { var dt = $("dockTalk"); (!opener.getClientRects().length && dt && dt.getClientRects().length ? dt : opener).focus({ preventScroll: true }); }
       opener = null;
     }
     // Intercept contact links in the page content; leave the contact page itself alone.
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var fa = e.target.closest && e.target.closest("[data-form]"), F = fa && FORMS[fa.getAttribute("data-form")];
+      if (F) { e.preventDefault(); openForm(fa, F, fa.getAttribute("data-form")); return; }
       var a = e.target.closest && e.target.closest('a[href^="#/contact"]'); if (!a) return;
       if (!a.classList.contains("x-fab") && !a.closest("#main")) return;
       if (a.hasAttribute("data-direct")) return;
@@ -1135,10 +1802,11 @@
     industries: "PRAVAHAx builds software, AI and IoT for manufacturing, agriculture, healthcare, education, logistics, retail, energy and financial services.",
     work: "Case studies from PRAVAHAx Systems Engineering: proof, not promises.",
     consulting: "Clear technology advice for every industry: AI readiness, architecture and code review, transformation roadmaps and fractional CTO support.",
-    about: "PRAVAHAx is a software, AI and IoT company from Chhatrapati Sambhajinagar. Meet our leadership, see our publications and visit our office.",
+    about: "The story of PRAVAHAx Systems Engineering, a software, AI and IoT company from Chhatrapati Sambhajinagar, and what our name means.",
+    "about/leadership": "Meet the leadership team of PRAVAHAx Systems Engineering, the executives who guide the company and stand behind every engagement.",
     labs: "PRAVAHAx Labs: research in cryptography, diskless Windows and edge detection, with bioinformatics and life sciences planned next.",
-    impact: "Teach as we build: school visits, leaders' birthdays celebrated in village schools, and books and school kits for children who need them.",
-    careers: "Careers at PRAVAHAx: open roles and internships in Chhatrapati Sambhajinagar across software, AI, hardware and design. We reply within 1 business day.",
+    impact: "Teach as we build: PRAVAHAx engineers in classrooms, with coding and electronics, robots, kitchen science, game day, books and leaders' birthdays celebrated in schools.",
+    careers: "Careers at PRAVAHAx: open roles and internships at our HQ in Chhatrapati Sambhajinagar, our R&D department in Santa Cruz, USA, and remote. We reply within 1 business day.",
     "careers/life": "Life at PRAVAHAx: the rooms we think in, the trips we take and the small rituals that keep our people curious. Thinking is Technology.",
     contact: "Contact PRAVAHAx Systems Engineering. Tell us what you're building; we reply within 1 business day. hello@pravahax.com · +91 94048 02076.",
     privacy: "How PRAVAHAx Systems Engineering handles the details you send us.",
@@ -1147,17 +1815,46 @@
     accessibility: "Our commitment to an accessible website for everyone.",
     sitemap: "Sitemap of the PRAVAHAx Systems Engineering website: services, industries, case studies, company pages and legal."
   };
+  // Phones: a sticky bottom "Apply" bar on role and internship pages. It hides while the form is on screen.
+  var jbarIO = null;
+  function setJobBar(j) {
+    var old = $("jbar"); if (old) old.remove();
+    if (jbarIO) { jbarIO.disconnect(); jbarIO = null; }
+    document.documentElement.classList.toggle("x-jobpage", !!j);
+    if (!j) return;
+    var bar = document.createElement("div");
+    bar.className = "x-jbar"; bar.id = "jbar";
+    bar.innerHTML = '<div class="x-jbar__t"><strong></strong><small></small></div><button class="x-btn x-btn--primary" type="button" data-jump="jform"></button>';
+    bar.querySelector("strong").textContent = j[0]; bar.querySelector("small").textContent = j[1];
+    bar.querySelector("button").textContent = j[2]; bar.querySelector("button").setAttribute("aria-label", j[3] || "Apply: go to the application form");
+    document.body.appendChild(bar);
+    var form = $("jform");
+    if (form && "IntersectionObserver" in window) {
+      jbarIO = new IntersectionObserver(function (es) { bar.classList.toggle("is-off", es[0].isIntersecting); bar.querySelector("button").tabIndex = es[0].isIntersecting ? -1 : 0; }, { rootMargin: "0px 0px -35% 0px" });
+      jbarIO.observe(form);
+    }
+  }
   function setMeta(sel, v) { var m = document.querySelector(sel); if (m) m.setAttribute("content", v); }
   function route() {
     var h = location.hash;
+    // Old in-page anchors from the single About page now have routes of their own.
+    if (h === "#beliefs") { location.replace("#/about/beliefs"); return; }
+    if (h === "#leadership") { location.replace("#/about/leadership"); return; }
     if (h && h.indexOf("#/") !== 0) return;
     var query = h.split("?")[1] || "";
     var parts = h.split("?")[0].replace(/^#\/?/, "").split("/").filter(Boolean);
-    var top = parts[0] || "", isHome = !top, title, html = "", si = -1;
+    var top = parts[0] || "", isHome = !top, title, html = "", si = -1, jobBar = null;
+    if (top === "careers" && parts[1] === "apply" && !parts[2]) { location.replace("#/careers/roles"); return; }
     var key = top === "careers" && parts[1] === "life" ? "careers/life" : top;
     var sub = key === "careers/life" ? parts[2] : parts[1];
+    // Role and internship pages are pages of their own, never a jump within Careers.
+    if (top === "careers" && /^(role|internship|internships|ipt)$/.test(parts[1] || "")) { key = "careers/" + parts.slice(1).join("/"); sub = ""; }
+    if (top === "about") {
+      if (/^(leadership|masoom|devang)$/.test(parts[1] || "")) key = "about/leadership";
+      if (parts[1] === "leadership") sub = "";
+    }
     palClose(true);
-    if (!first && key === lastTop && (top === "about" || top === "careers") && !page.hidden && (!sub || page.querySelector('[data-sub="' + sub + '"]'))) { jump(sub, true); return; }
+    if (!first && key === lastTop && (top === "about" || top === "careers") && !page.hidden && (!sub || page.querySelector('[data-sub="' + sub + '"]'))) { mega(false); if (!menu.hidden) setMenu(false); if ($("jobList")) jfInit(query); jump(sub, true); return; }
     lastTop = key;
     if (top === "services" && parts[1] === "consultancy") { location.replace("#/consulting"); return; }
     var T = function (t) { return t + " | " + BASE; }, desc = DESC[key] || HOME_DESC;
@@ -1175,11 +1872,21 @@
       if (!parts[1]) { html = viewWork(); title = T("Work"); }
       else if (si > -1) { html = viewCase(CASES[si], si); title = T(CASES[si].name + " case study"); desc = CASES[si].name + ": " + CASES[si].title + " A PRAVAHAx case study."; }
     } else if (top === "consulting" && !parts[1]) { html = viewConsulting(); title = T("Consulting"); }
-    else if (top === "about" && (!parts[1] || /^(beliefs|leadership|publications|masoom|devang)$/.test(parts[1]))) { html = viewAbout(); title = T(parts[1] === "publications" ? "Publications" : parts[1] === "leadership" ? "Leadership" : parts[1] === "beliefs" ? "Our beliefs" : "About"); if (parts[1] === "publications") desc = "ICT textbook series for Classes 8–10, written by the PRAVAHAx team in Marathi and English for school students."; }
+    else if (top === "about" && !parts[2] && key === "about/leadership") { html = viewLeadership(); title = T("Leadership"); }
+    else if (top === "about" && !parts[2] && (!parts[1] || parts[1] === "publications" || parts[1] === "beliefs")) { html = viewAbout(); title = T(parts[1] === "publications" ? "Publications" : "Our story"); if (parts[1] === "publications") desc = "ICT textbook series for Classes 8–10, written by the PRAVAHAx team in Marathi and English for school students."; }
     else if (top === "labs" && !parts[1]) { html = viewLabs(); title = T("PRAVAHAx Labs"); }
     else if (top === "impact" && !parts[1]) { html = viewImpact(); title = T("Teach as we build"); }
     else if (key === "careers/life" && !parts[3] && (!parts[2] || /^(rooms|exhibits|outside|rituals|fine-print)$/.test(parts[2]))) { html = viewLife(); title = T("Life at PRAVAHAx"); }
-    else if (top === "careers" && !parts[2] && (!parts[1] || /^(roles|internships|apply)$/.test(parts[1]))) { html = viewCareers(); title = T(parts[1] === "internships" ? "Internships" : "Careers"); }
+    else if (top === "careers" && parts[1] === "role" && parts[2] && !parts[3] && findBy(ROLES, parts[2])) { var jr = findBy(ROLES, parts[2]); html = viewRole(jr); title = T(jr.t + " · Careers"); desc = jr.t + " at PRAVAHAx: " + jr.team + ", " + LOCS[jr.loc] + ", " + jr.type + ", " + jr.exp + ". " + jr.about; jobBar = [jr.t, LOCS[jr.loc] + " · " + jr.type, "Apply"]; }
+    else if (top === "careers" && parts[1] === "ipt" && !parts[3] && /^(|student|college)$/.test(parts[2] || "")) {
+      var ipk = parts[2] || "";
+      if (ipk === "student") { html = viewIptStudent(); title = T("IPT registration: Student"); desc = "Register for In-Plant Training (IPT) 2026–27 at PRAVAHAx: 4–6 months of live engineering work for final-year BE/BTech, Diploma, MCA and BSc IT students."; jobBar = ["IPT registration: Student", "4–6 months · Chhatrapati Sambhajinagar", "Register", "Register: go to the student registration form"]; }
+      else if (ipk === "college") { html = viewIptCollege(); title = T("IPT registration: College"); desc = "Colleges, TPOs and IPT coordinators: partner with PRAVAHAx for In-Plant Training 2026–27. MoU on request, monthly reports and a campus visit."; jobBar = ["IPT registration: College", "For TPOs and IPT coordinators", "Register", "Register: go to the college registration form"]; }
+      else { html = viewIpt(); title = T("In-Plant Training (IPT)"); desc = "In-Plant Training (IPT) 2026–27 at PRAVAHAx: 4–6 months of live engineering work for final-year students, in Chhatrapati Sambhajinagar. Students and colleges can register."; jobBar = ["In-Plant Training 2026–27", "Students and colleges", "Register", "Register: go to the registration options"]; }
+    }
+    else if (top === "careers" && parts[1] === "internship" && parts[2] && !parts[3] && findBy(INTERNS, parts[2])) { var ji = findBy(INTERNS, parts[2]); html = viewIntern(ji); title = T(ji.t + " · Internships"); desc = ji.t + " at PRAVAHAx: " + LOCS[ji.loc] + ", " + ji.type + ", " + ji.dur + ". " + ji.who; jobBar = [ji.t, LOCS[ji.loc] + " · " + ji.dur, "Apply"]; }
+    else if (top === "careers" && parts[1] === "internships" && !parts[2]) { html = viewInterns(); title = T("Internships"); desc = "Internships at PRAVAHAx for students and recent graduates, with a mentor: in Chhatrapati Sambhajinagar, remote, or at our R&D department in Santa Cruz, USA."; }
+    else if (top === "careers" && !parts[2] && (!parts[1] || parts[1] === "roles")) { html = viewCareers(); title = T("Careers"); }
     else if (top === "contact" && !parts[1]) { html = viewContact(); title = T("Contact"); }
     else if (top === "sitemap" && !parts[1]) { html = viewSitemap(); title = T(PAGES.sitemap); }
     else if (LEGAL[top] && !parts[1]) { html = viewLegal(top); title = T(LEGAL[top][0]); }
@@ -1189,6 +1896,10 @@
     home.hidden = !isHome; page.hidden = isHome;
     page.innerHTML = isHome ? "" : html;
     if (!isHome) fixPos(page);
+    setJobBar(jobBar);
+    document.documentElement.classList.remove("x-jf-lock");
+    if ($("jobList")) jfInit(query);
+    [].forEach.call(page.querySelectorAll("form.x-jform"), jSync);
     // Dark first section: the header floats clear over it until the page scrolls.
     var lead = (isHome ? home : page).firstElementChild;
     document.documentElement.classList.toggle("x-overdark", !!lead && lead.matches(".x-hero,.x-band--navy"));
@@ -1208,7 +1919,7 @@
     fabRoute = top === "contact" || (top === "careers" && key !== "careers/life"); fabSet();
     document.title = title;
     [].forEach.call(document.querySelectorAll("[data-route]"), function (a) {
-      var on = a.getAttribute("data-route").split(" ").indexOf(top) > -1;
+      var on = a.getAttribute("data-route").split(" ").indexOf(key === "careers/life" ? "life" : top) > -1;
       if (a.tagName === "A") { if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); }
       else a.classList.toggle("is-current", on);
     });
@@ -1220,11 +1931,428 @@
       var h1 = (isHome ? home : page).querySelector("h1");
       if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); } else $("main").focus({ preventScroll: true });
     }
-    if (sub && (top === "about" || top === "careers")) setTimeout(function () { jump(sub, false); }, 0);
+    // Arriving at Our beliefs from another page scrolls smoothly down Our story (jump() keeps it instant under reduced motion).
+    var glide = sub === "beliefs";
+    if (sub && (top === "about" || top === "careers")) setTimeout(function () { jump(sub, glide); }, 0);
     first = false;
     reveal(isHome ? home : page);
+    swipeRows(isHome ? home : page);
+    dodge(isHome ? home : page);
     if (isHome) railInit();
   }
+  // Leadership spotlight: hover, keyboard focus or tap lifts one card and slides its note out; the others recede.
+  // On phones the note opens inside the card; under reduced motion every note is simply shown (CSS) and nothing toggles.
+  (function () {
+    var ptr = "mouse", kbd = false;
+    var narrow = function () { return matchMedia("(max-width: 640px)").matches; };
+    var still = function () { return matchMedia("(prefers-reduced-motion: reduce)").matches; };
+    function set(g, li) {
+      if (!g) return;
+      [].forEach.call(g.querySelectorAll(".x-lcard"), function (c) {
+        var on = c === li; c.classList.toggle("is-active", on);
+        var t = c.querySelector(".x-lcard__trig"); if (t) t.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+      if (li && !narrow()) { var gr = g.getBoundingClientRect(), r = li.getBoundingClientRect(); li.classList.toggle("is-left", r.left + r.width / 2 > gr.left + gr.width / 2 + 4); }
+      g.classList.toggle("is-focusing", !!li);
+    }
+    var cardOf = function (el) { return el && el.closest ? el.closest(".x-lgrid .x-lcard") : null; };
+    document.addEventListener("keydown", function (e) {
+      kbd = true;
+      var g = page.querySelector(".x-lgrid");
+      if (e.key === "Escape" && g && g.classList.contains("is-focusing")) { var a = g.querySelector(".x-lcard.is-active .x-lcard__trig"); set(g, null); if (a && g.contains(document.activeElement)) a.focus(); return; }
+      var t = e.target.closest && e.target.closest(".x-lcard__trig");
+      if (t && (e.key === "Enter" || e.key === " ") && !still()) { e.preventDefault(); var li = cardOf(t); set(li.parentNode, li.classList.contains("is-active") ? null : li); }
+    }, true);
+    document.addEventListener("pointerdown", function (e) { ptr = e.pointerType || "mouse"; kbd = false; }, true);
+    document.addEventListener("pointerover", function (e) {
+      if (e.pointerType !== "mouse" || narrow() || still()) return;
+      var li = cardOf(e.target); if (li && !li.classList.contains("is-active")) set(li.parentNode, li);
+    });
+    document.addEventListener("pointerout", function (e) {
+      if (e.pointerType !== "mouse" || narrow()) return;
+      var g = e.target.closest && e.target.closest(".x-lgrid");
+      if (g && !(e.relatedTarget && g.contains(e.relatedTarget)) && !g.contains(document.activeElement)) set(g, null);
+    });
+    document.addEventListener("focusin", function (e) {
+      if (!kbd || still()) return;
+      var t = e.target.closest && e.target.closest(".x-lcard__trig"); if (t) set(cardOf(t).parentNode, cardOf(t));
+    });
+    document.addEventListener("focusout", function (e) {
+      var g = e.target.closest && e.target.closest(".x-lgrid");
+      if (g && kbd && !(e.relatedTarget && g.contains(e.relatedTarget))) set(g, null);
+    });
+    document.addEventListener("click", function (e) {
+      var g = page.querySelector(".x-lgrid"); if (!g || still()) return;
+      var li = cardOf(e.target);
+      if (!li) { if (g.classList.contains("is-focusing")) set(g, null); return; }
+      if (e.target.closest("a")) return;
+      if (ptr === "mouse" && !narrow()) set(g, li);
+      else set(g, li.classList.contains("is-active") ? null : li);
+    });
+    var lastW = innerWidth;
+    addEventListener("resize", function () { if (innerWidth === lastW) return; lastW = innerWidth; var g = page.querySelector(".x-lgrid.is-focusing"); if (g) set(g, null); });
+  })();
+
   addEventListener("hashchange", route);
   route();
+})();
+;
+/* Mobile/tablet redesign, pass 1: runs only while (max-width:1024px) matches. */
+(function () {
+  var MQ = matchMedia("(max-width:1024px)"), PH = matchMedia("(max-width:600px)");
+  var RM = matchMedia("(prefers-reduced-motion: reduce)");
+  var root = document.documentElement, $ = function (id) { return document.getElementById(id); };
+  var on = function () { return MQ.matches; };
+  var cleanups = [];
+
+  /* Header: hide on scroll down, show on scroll up */
+  var lastY = scrollY, hraf = 0;
+  function hdr() {
+    hraf = 0;
+    var y = scrollY, dy = y - lastY;
+    if (!on() || root.classList.contains("x-menu-open") || root.classList.contains("x-cm-lock") || y < 80 || ($("header").contains(document.activeElement))) root.classList.remove("x-hdr-hide");
+    else if (dy > 6) root.classList.add("x-hdr-hide");
+    else if (dy < -6) root.classList.remove("x-hdr-hide");
+    if (Math.abs(dy) > 6 || y < 80) lastY = y;
+  }
+  addEventListener("scroll", function () { if (!hraf) hraf = requestAnimationFrame(hdr); }, { passive: true });
+
+  /* Menu backdrop and dock Talk */
+  $("menuScrim").addEventListener("click", function () { $("menuClose").click(); });
+  $("dockTalk").addEventListener("click", function () {
+    if (/^#\/contact(\?|\/|$)/.test(location.hash)) { var n = $("c-name"); if (n) { n.scrollIntoView({ block: "center", behavior: RM.matches ? "auto" : "smooth" }); n.focus({ preventScroll: true }); } return; }
+    var f = document.querySelector(".x-fab"); if (f) f.click();
+  });
+  /* Dock: glass bubble that slides to the current item, and dark glass over dark bands */
+  (function () {
+    var dock = document.querySelector(".x-dock"); if (!dock) return;
+    var bub = document.createElement("span"); bub.className = "x-dock__bubble"; bub.setAttribute("aria-hidden", "true");
+    dock.insertBefore(bub, dock.firstChild);
+    function place() {
+      var a = dock.querySelector('a[aria-current="page"]');
+      if (!a || !a.offsetWidth) { bub.classList.remove("is-on"); return; }
+      bub.style.width = a.offsetWidth + "px"; bub.style.transform = "translateX(" + a.offsetLeft + "px)";
+      bub.classList.add("is-on");
+    }
+    function settle() { place(); requestAnimationFrame(function () { dock.classList.add("is-ready"); }); }
+    var io = null, seen = [];
+    function watch() {
+      if (io) io.disconnect(); io = null; seen = []; root.classList.remove("x-dock-dark");
+      if (!PH.matches || !("IntersectionObserver" in window)) return;
+      var h = innerHeight, top = -Math.max(0, h - 84);
+      io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { var k = seen.indexOf(e.target); if (e.isIntersecting && k < 0) seen.push(e.target); else if (!e.isIntersecting && k > -1) seen.splice(k, 1); });
+        root.classList.toggle("x-dock-dark", seen.length > 0);
+      }, { rootMargin: top + "px 0px -12px 0px", threshold: 0 });
+      [].forEach.call(document.querySelectorAll(".x-hero, .x-band--navy, .x-dark:not(.x-ctaband), .x-ctaband .x-cta, .x-foot"), function (el) { io.observe(el); });
+    }
+    var rt = 0;
+    addEventListener("hashchange", function () { clearTimeout(rt); rt = setTimeout(function () { place(); watch(); }, 60); });
+    addEventListener("resize", function () { dock.classList.remove("is-ready"); clearTimeout(rt); rt = setTimeout(function () { settle(); watch(); }, 120); });
+    if (PH.addEventListener) PH.addEventListener("change", function () { dock.classList.remove("is-ready"); setTimeout(function () { settle(); watch(); }, 0); });
+    if (document.readyState === "complete") { settle(); watch(); } else addEventListener("load", function () { settle(); watch(); });
+    setTimeout(function () { settle(); watch(); }, 0);
+  })();
+  document.addEventListener("focusin", function (e) { root.classList.toggle("x-kb", !!(e.target.matches && e.target.matches("input,textarea,select"))); });
+  document.addEventListener("focusout", function () { setTimeout(function () { var a = document.activeElement; root.classList.toggle("x-kb", !!(a && a.matches && a.matches("input,textarea,select"))); }, 0); });
+
+  /* Reusable swipe row with dots synced by IntersectionObserver */
+  function mrow(row, dark) {
+    if (row.hasAttribute("data-mrow")) return null;
+    var items = [].slice.call(row.children);
+    if (items.length < 2) return null;
+    row.setAttribute("data-mrow", ""); row.classList.add("x-mrow");
+    var dots = document.createElement("div");
+    dots.className = "x-mdots" + (dark ? " x-mdots--dark" : ""); dots.setAttribute("aria-hidden", "true");
+    dots.innerHTML = items.map(function () { return "<i></i>"; }).join("");
+    row.parentNode.insertBefore(dots, row.nextSibling);
+    var ratios = items.map(function () { return 0; }), ds = dots.children;
+    var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { ratios[items.indexOf(e.target)] = e.intersectionRatio; });
+      var k = 0; ratios.forEach(function (r, i) { if (r > ratios[k] + 0.01) k = i; });
+      [].forEach.call(ds, function (d, j) { d.classList.toggle("is-on", j === k); });
+    }, { root: row, threshold: [0, 0.25, 0.5, 0.75, 1] }) : null;
+    if (io) items.forEach(function (it) { io.observe(it); }); else ds[0].classList.add("is-on");
+    var undo = function () { if (io) io.disconnect(); dots.remove(); row.classList.remove("x-mrow"); row.removeAttribute("data-mrow"); row.scrollLeft = 0; };
+    cleanups.push(undo);
+    return { row: row, items: items };
+  }
+
+  /* Staggered reveal, once */
+  var rio = null;
+  function reveal(els) {
+    if (RM.matches || !("IntersectionObserver" in window)) return;
+    if (!rio) rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); rio.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" });
+    els.forEach(function (el, i) {
+      if (el.hasAttribute("data-mrv") || el.closest("[data-swipe],[data-mrow]")) return;
+      el.setAttribute("data-mrv", ""); el.classList.add("x-mrv"); el.style.transitionDelay = Math.min(i, 5) * 70 + "ms";
+      rio.observe(el);
+    });
+  }
+  function stagger(scope) {
+    [].forEach.call(scope.querySelectorAll(".x-steps, .x-grid, .x-mind__grid, .x-pgrid, .x-checks"), function (g) { reveal([].slice.call(g.children)); });
+  }
+
+  /* Home: industries tiles, promises chips, process timeline */
+  var I = (window.PX && window.PX.I) || {};
+  function homeIndustries() {
+    if ($("mInd") || !window.PX) return;
+    var beyond = document.querySelector('#view-home [aria-label="Beyond client work"]'); if (!beyond) return;
+    var s = document.createElement("section");
+    s.className = "x-sec x-monly"; s.id = "mInd"; s.setAttribute("aria-labelledby", "mIndTitle");
+    s.innerHTML = '<div class="x-wrap"><div class="x-head"><div><p class="x-eyebrow">Industries</p><h2 class="x-h2" id="mIndTitle">Built for the sectors that move India.</h2></div></div><ul class="x-mind__grid">' +
+      window.PX.INDUSTRIES.map(function (x) { return '<li><a href="#/industries/' + x.slug + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (I[x.slug] || "") + "</svg><span>" + x.name.replace(/&/g, "&amp;") + "</span></a></li>"; }).join("") +
+      '</ul><a class="x-arrow" href="#/industries">All industries <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>';
+    beyond.parentNode.insertBefore(s, beyond);
+  }
+  var tio = null;
+  function timeline() {
+    var lis = document.querySelectorAll("#process .x-steps li");
+    if (!lis.length || tio || !PH.matches) return;
+    if (RM.matches || !("IntersectionObserver" in window)) { [].forEach.call(lis, function (l) { l.classList.add("is-lit"); }); return; }
+    tio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add("is-lit"); else if (e.boundingClientRect.top > 0) e.target.classList.remove("is-lit"); });
+    }, { rootMargin: "0px 0px -40% 0px" });
+    [].forEach.call(lis, function (l) { tio.observe(l); });
+    cleanups.push(function () { tio.disconnect(); tio = null; [].forEach.call(lis, function (l) { l.classList.remove("is-lit"); }); });
+  }
+  function home() {
+    homeIndustries();
+    timeline();
+  }
+
+  /* Leadership (≤1024px): one roster in hierarchy order, each photo shown once; a row opens the leader sheet (#ls).
+     The desktop grid stays in the DOM and is hidden by CSS while [data-roster] is set. */
+  var CHEVR = '<svg class="x-roster__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  var pad2 = function (i) { return (i < 9 ? "0" : "") + (i + 1); };
+  var LS = (function () {
+    var ls = $("ls"), card = ls.querySelector(".x-cm__card"), P = [], cur = 0, closeT = 0;
+    var FOC = 'a[href]:not([hidden]),button:not([disabled])';
+    function foc() { return [].filter.call(card.querySelectorAll(FOC), function (el) { return el.getClientRects().length > 0; }); }
+    function fill(i) {
+      var p = P[i], im = $("lsImg"), m = $("lsMail");
+      im.src = p.src; im.alt = p.alt;
+      $("lsIdx").textContent = pad2(i) + " / " + pad2(P.length - 1);
+      $("lsName").textContent = p.name;
+      $("lsRole").textContent = p.role;
+      $("lsDesc").textContent = p.desc;
+      $("lsSign").textContent = p.sign;
+      $("lsNote").hidden = !p.desc;
+      m.hidden = !p.mail; m.href = p.mail || "mailto:hello@pravahax.com";
+      m.querySelector("span").textContent = "Email " + p.name.split(" ")[0];
+      m.setAttribute("aria-label", "Email " + p.name + (p.mailT ? ", " + p.mailT : ""));
+      $("lsAddr").textContent = p.mailT;
+      card.scrollTop = 0;
+    }
+    function step(d) {
+      cur = (cur + d + P.length) % P.length; fill(cur);
+      $("lsLive").textContent = P[cur].name + ", " + P[cur].role + ". " + (cur + 1) + " of " + P.length + ".";
+    }
+    function open(list, i) {
+      clearTimeout(closeT);
+      P = list; cur = i; fill(i); $("lsLive").textContent = "";
+      document.body.style.paddingRight = Math.max(0, innerWidth - document.documentElement.clientWidth) + "px";
+      root.classList.add("x-cm-lock");
+      card.style.transform = ""; card.style.transition = "";
+      ls.hidden = false; void ls.offsetWidth; ls.classList.add("is-on");
+      card.focus({ preventScroll: true });
+    }
+    function close(instant) {
+      if (ls.hidden) return;
+      ls.classList.remove("is-on");
+      root.classList.remove("x-cm-lock"); document.body.style.paddingRight = "";
+      var done = function () { ls.hidden = true; card.style.transform = ""; card.style.transition = ""; };
+      clearTimeout(closeT);
+      if (instant || RM.matches) done(); else closeT = setTimeout(done, 280);
+      var row = P[cur] && P[cur].row;
+      if (!instant && row && document.contains(row)) row.focus({ preventScroll: true });
+    }
+    ls.addEventListener("click", function (e) { if (e.target.closest("[data-ls-close]")) close(); });
+    $("lsPrev").addEventListener("click", function () { step(-1); });
+    $("lsNext").addEventListener("click", function () { step(1); });
+    ls.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.stopPropagation(); close(); return; }
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); step(e.key === "ArrowLeft" ? -1 : 1); return; }
+      if (e.key !== "Tab") return;
+      var f = foc(); if (!f.length) { e.preventDefault(); return; }
+      var a = document.activeElement;
+      if (e.shiftKey && (a === f[0] || a === card)) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && a === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    });
+    document.addEventListener("focusin", function (e) { if (!ls.hidden && ls.classList.contains("is-on") && !ls.contains(e.target)) card.focus({ preventScroll: true }); });
+    // Swipe down (from the handle, or anywhere while the sheet is scrolled to the top) closes it; a sideways swipe on the photo moves to the adjacent leader.
+    var y0 = null, x0 = 0, dy = 0, dx = 0, drag = false, onImg = false;
+    card.addEventListener("touchstart", function (e) {
+      if (e.touches.length !== 1) { y0 = null; return; }
+      y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; dy = dx = 0; drag = false;
+      onImg = !!e.target.closest(".x-ls__img");
+      if (card.scrollTop > 0 && !e.target.closest(".x-cm__grab")) y0 = null;
+    }, { passive: true });
+    card.addEventListener("touchmove", function (e) {
+      if (y0 === null) return;
+      dy = e.touches[0].clientY - y0; dx = e.touches[0].clientX - x0;
+      if (!drag && dy > 8 && dy > Math.abs(dx)) { drag = true; card.style.transition = "none"; }
+      if (drag) card.style.transform = "translateY(" + Math.max(0, dy) + "px)";
+    }, { passive: true });
+    card.addEventListener("touchend", function () {
+      if (y0 === null) return; y0 = null;
+      if (drag) { card.style.transition = ""; if (dy > 90) close(); else card.style.transform = ""; return; }
+      if (onImg && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) step(dx < 0 ? 1 : -1);
+    });
+    card.addEventListener("touchcancel", function () { y0 = null; if (drag) { card.style.transition = ""; card.style.transform = ""; } });
+    return { open: open, close: close };
+  })();
+  function leadership() {
+    var g = document.querySelector("#view-page .x-lgrid");
+    if (!g || g.hasAttribute("data-roster")) return;
+    var P = [].map.call(g.querySelectorAll(".x-lcard"), function (li) {
+      var img = li.querySelector(".x-lcard__img img"), m = li.querySelector(".x-lmail"), n = li.querySelector(".x-lnote");
+      var sg = n && n.querySelector(".x-lnote__sign"), d = n && n.querySelector("p:not(.x-lnote__sign)");
+      return { k: li.getAttribute("data-sub"), name: li.querySelector(".x-h3").textContent, role: li.querySelector(".x-lcard__role").textContent, src: img.getAttribute("src"), alt: img.getAttribute("alt"), desc: d ? d.textContent : "", sign: sg ? sg.textContent : "", mail: m ? m.getAttribute("href") : "", mailT: m ? m.querySelector(".x-lmail__t").textContent : "" };
+    });
+    if (!P.length) return;
+    var r = document.createElement("ul");
+    r.className = "x-roster"; r.setAttribute("aria-label", "Leadership team");
+    r.innerHTML = P.map(function (p, i) {
+      return '<li><button type="button" class="x-roster__row" aria-haspopup="dialog" aria-controls="ls"><span class="x-roster__img"><img src="' + p.src + '" alt="" decoding="async" /></span>' +
+        '<span class="x-roster__txt"><span class="x-roster__idx" aria-hidden="true">' + pad2(i) + '</span><span class="x-roster__name"></span><span class="x-roster__role"></span></span>' + CHEVR + "</button></li>";
+    }).join("");
+    var rows = [].slice.call(r.querySelectorAll(".x-roster__row"));
+    P.forEach(function (p, i) { p.row = rows[i]; rows[i].querySelector(".x-roster__name").textContent = p.name; rows[i].querySelector(".x-roster__role").textContent = p.role; });
+    g.parentNode.insertBefore(r, g);
+    g.setAttribute("data-roster", "");
+    r.addEventListener("click", function (e) { var b = e.target.closest(".x-roster__row"); if (b) LS.open(P, rows.indexOf(b)); });
+    // Deep links such as #/about/devang scroll to that leader and open the sheet.
+    var sub = (location.hash.split("?")[0].split("/")[2] || "").toLowerCase(), si = -1;
+    P.forEach(function (p, i) { if (p.k === sub) si = i; });
+    if (si > -1) { rows[si].scrollIntoView({ block: "center", behavior: "auto" }); LS.open(P, si); }
+    cleanups.push(function () { LS.close(true); r.remove(); g.removeAttribute("data-roster"); });
+  }
+
+  /* Pass 2a: inner pages (marked with data-mv for CSS), accordions, footer */
+  var PLUS2 = '<svg class="x-macc__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>', accN = 0;
+  function after(el) { var a = [], n = el.nextElementSibling; while (n) { a.push(n); n = n.nextElementSibling; } return a; }
+  // Collapse the siblings after `hd` under a button heading; `hd` is hidden and comes back on cleanup.
+  function acc(hd, title, cls, keep) {
+    var nodes = after(hd); if (!nodes.length || hd.hasAttribute("data-macc")) return;
+    var id = "macc" + (++accN), w = document.createElement("div"), hn = keep ? "h3" : "h2";
+    w.className = "x-macc" + (cls ? " " + cls : "");
+    w.innerHTML = "<" + hn + ' class="x-macc__h"><button type="button" aria-expanded="false" aria-controls="' + id + '"><span></span>' + PLUS2 + "</button></" + hn + '><div class="x-macc__p" id="' + id + '" hidden></div>';
+    w.querySelector("span").textContent = title;
+    var p = w.lastChild, b = w.querySelector("button");
+    nodes.forEach(function (n) { p.appendChild(n); });
+    hd.parentNode.insertBefore(w, hd.nextSibling);
+    hd.setAttribute("data-macc", ""); if (!keep) hd.style.display = "none";
+    b.addEventListener("click", function () { var o = b.getAttribute("aria-expanded") !== "true"; b.setAttribute("aria-expanded", o); p.hidden = !o; });
+    cleanups.push(function () { nodes.forEach(function (n) { hd.parentNode.insertBefore(n, w); }); w.remove(); hd.removeAttribute("data-macc"); hd.style.display = ""; });
+  }
+  function unswipe(row) {
+    if (!row || !row.classList.contains("x-swipe")) return;
+    var bar = row.nextElementSibling; bar = bar && bar.classList.contains("x-swipebar") ? bar : null;
+    row.classList.remove("x-swipe"); if (bar) bar.style.display = "none";
+    cleanups.push(function () { row.classList.add("x-swipe"); if (bar) bar.style.display = ""; });
+  }
+  function footAcc() {
+    if (!PH.matches) return;
+    [].forEach.call(document.querySelectorAll(".x-foot__grid>div:not(.x-foot__brand)>h2"), function (h) { acc(h, h.textContent, "x-macc--foot"); });
+  }
+  function inner() {
+    var p = $("view-page"); if (!p || p.hidden) return;
+    var parts = location.hash.split("?")[0].replace(/^#\/?/, "").split("/").filter(Boolean), top = parts[0] || "", mv = "";
+    var detail = parts[1] && p.querySelector(".x-band .x-split .x-crumb");
+    if ((top === "services" || top === "consulting") && !parts[1]) { mv = top === "services" ? "svcs" : "consult"; unswipe(p.querySelector(".x-indgrid")); }
+    else if ((top === "services" || top === "industries") && detail) {
+      mv = "detail";
+      var g = p.querySelector(".x-sec .x-grid"); if (g) mrow(g);
+      [].forEach.call(p.querySelectorAll(".x-sec .x-wrap>.x-head"), function (hd) { var nx = hd.nextElementSibling; if (nx && (nx.matches(".x-steps") || (nx.matches(".x-grid") && !nx.hasAttribute("data-mrow")))) acc(hd, hd.querySelector("h2").textContent); });
+      [].forEach.call(p.querySelectorAll(".x-split>div>h2+.x-checks"), function (c) { acc(c.previousElementSibling, c.previousElementSibling.textContent); });
+    }
+    else if (top === "industries" && !parts[1]) { mv = "inds"; var ig = p.querySelector(".x-indgrid"); unswipe(ig); if (ig) mrow(ig); }
+    else if (top === "work" && !parts[1]) { mv = "work"; unswipe(p.querySelector(".x-cases")); }
+    else if (top === "work" && p.querySelector(".x-hero--case")) {
+      mv = "case";
+      var f = p.querySelector(".x-facts"); if (f) { f.classList.add("x-mchips"); cleanups.push(function () { f.classList.remove("x-mchips"); }); }
+      if (root.classList.contains("x-overdark")) {
+        root.classList.remove("x-overdark");
+        cleanups.push(function () { var v = $("view-home").hidden ? $("view-page") : $("view-home"), l = v.firstElementChild; root.classList.toggle("x-overdark", !!l && l.matches(".x-hero,.x-band--navy")); });
+      }
+    }
+    else if (top === "contact") mv = "contact";
+    else if (p.querySelector(".x-story2")) { mv = "story"; storyM(p); }
+    else if (p.querySelector(".x-imphero")) { mv = "impact"; deck(p.querySelector(".x-pgrid")); light(p.querySelectorAll(".x-steps li")); }
+    else if (p.querySelector(".x-labhero")) { mv = "labs"; deck(p.querySelector(".x-labhero .x-labnotes")); deck(p.querySelector(".x-board")); terms(p); }
+    else if (p.querySelector(".x-hero--life")) { mv = "life"; deck(p.querySelector(".x-spaces")); deck(p.querySelector("#sec-rituals .x-rituals")); unswipe(p.querySelector(".x-exhs")); terms(p); }
+    else if (p.querySelector("#sec-roles")) { mv = "careers"; careersM(p); }
+    else if (top === "sitemap" || /^(privacy|terms|cookies|accessibility)$/.test(top)) mv = "read";
+    if (mv) { p.setAttribute("data-mv", mv); cleanups.push(function () { p.removeAttribute("data-mv"); }); }
+  }
+
+  /* Pass 2b: story, impact, labs, life, careers, reading pages */
+  // Swipe deck: phones already get .x-swipe (with dots) from the main script; elsewhere use mrow.
+  function deck(el) { if (el && !(PH.matches && el.classList.contains("x-swipe"))) mrow(el); }
+  // Turn heading `h` into a toggle; `nodes` move into a panel after it and go back on cleanup.
+  function fold(h, nodes, open, pre, sub) {
+    if (!h || h.hasAttribute("data-fold")) return;
+    nodes = nodes.filter(Boolean); if (!nodes.length) return;
+    var id = "mfold" + (++accN), html0 = h.innerHTML, pos = nodes.map(function (n) { return [n.parentNode, n.nextSibling]; });
+    var p = document.createElement("div"); p.className = "x-mfold__p"; p.id = id; p.hidden = !open;
+    h.setAttribute("data-fold", "");
+    h.innerHTML = '<button type="button" class="x-mfold__b" aria-expanded="' + !!open + '" aria-controls="' + id + '">' + (pre || "") + '<span class="x-mfold__t"></span>' + PLUS2 + "</button>";
+    var t = h.querySelector(".x-mfold__t"); t.innerHTML = html0;
+    if (sub) { var s = document.createElement("small"); s.className = "x-mfold__s"; s.textContent = sub; t.appendChild(s); }
+    h.parentNode.insertBefore(p, h.nextSibling);
+    nodes.forEach(function (n) { p.appendChild(n); });
+    var b = h.firstChild;
+    b.addEventListener("click", function () { var o = b.getAttribute("aria-expanded") !== "true"; b.setAttribute("aria-expanded", o); p.hidden = !o; });
+    cleanups.push(function () { for (var i = nodes.length - 1; i >= 0; i--) pos[i][0].insertBefore(nodes[i], pos[i][1]); p.remove(); h.innerHTML = html0; h.removeAttribute("data-fold"); });
+  }
+  function storyM(p) {
+    deck(p.querySelector(".x-notesrow"));
+    deck(p.querySelector(".x-beliefs"));
+    [].forEach.call(p.querySelectorAll(".x-bdeep"), function (s, i) {
+      var b = s.querySelector(".x-bdeep__body"); if (!b) return;
+      fold(b.querySelector(".x-bdeep__t"), [].slice.call(b.querySelectorAll(".x-bdeep__line,.x-bdeep__lbl,.x-bdeep__list")), i === 0, '<span class="x-mfold__n" aria-hidden="true">0' + (i + 1) + "</span>");
+    });
+  }
+  function terms(p) {
+    [].forEach.call(p.querySelectorAll(".x-terms"), function (t) {
+      var hd = t.parentNode.querySelector(":scope>.x-head"); if (!hd) return;
+      acc(hd, "Read all " + t.querySelectorAll("li").length + " clauses", "x-macc--terms", true);
+    });
+  }
+  function careersM(p) {
+    [].forEach.call(p.querySelectorAll(".x-role"), function (r) {
+      var meta = r.querySelector(".x-role__meta"), team = meta && meta.firstElementChild;
+      fold(r.querySelector(".x-h3"), [meta, r.querySelector(".x-btn")], false, "", team ? team.textContent : "");
+    });
+  }
+  // Vertical timeline whose nodes light as they reach the upper part of the screen.
+  function light(lis) {
+    if (!lis.length) return;
+    var all = function (v) { [].forEach.call(lis, function (l) { l.classList.toggle("is-lit", v); }); };
+    if (RM.matches || !("IntersectionObserver" in window)) { all(true); cleanups.push(function () { all(false); }); return; }
+    var o = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add("is-lit"); else if (e.boundingClientRect.top > 0) e.target.classList.remove("is-lit"); });
+    }, { rootMargin: "0px 0px -40% 0px" });
+    [].forEach.call(lis, function (l) { o.observe(l); });
+    cleanups.push(function () { o.disconnect(); all(false); });
+  }
+
+  function enhance() {
+    if (!on()) return;
+    var isHome = !$("view-home").hidden;
+    footAcc();
+    if (isHome) home(); else { leadership(); inner(); }
+    stagger(isHome ? $("view-home") : $("view-page"));
+  }
+  function teardown() {
+    cleanups.splice(0).forEach(function (f) { try { f(); } catch (err) {} });
+    root.classList.remove("x-hdr-hide");
+    [].forEach.call(document.querySelectorAll("[data-mrv]"), function (el) { el.classList.remove("x-mrv"); el.removeAttribute("data-mrv"); el.style.transitionDelay = ""; });
+  }
+  function routeChange() { cleanups.splice(0).forEach(function (f) { try { f(); } catch (err) {} }); root.classList.remove("x-hdr-hide"); setTimeout(enhance, 0); }
+  addEventListener("hashchange", routeChange);
+  function mqChange() { teardown(); enhance(); }
+  [MQ, PH].forEach(function (m) { if (m.addEventListener) m.addEventListener("change", mqChange); else if (m.addListener) m.addListener(mqChange); });
+  enhance();
 })();
